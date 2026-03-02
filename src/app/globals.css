@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  /* MYA Navy Blue Monochromatic Palette */
+  --color-industrial-100: #f1f4f9;
+  /* Very light blue-gray background */
+  --color-industrial-200: #e0e7f1;
+  /* Borders */
+  --color-industrial-400: #8aa1ba;
+  /* Muted texts (Silver/Grey from the gear) */
+  --color-industrial-600: #3c5277;
+  /* Secondary items */
+  --color-industrial-800: #1a264a;
+  /* Medium Navy */
+  --color-industrial-900: #121b33;
+  /* Dark Navy from Logo Background */
+
+  --color-action: #2b437e;
+  /* Action color, a slightly lighter punchy blue from the same family */
+  --color-action-hover: #1f3263;
+  /* Darker hover */
+
+  --color-background: #f8fafc;
+  --color-foreground: #1e293b;
+
+  --font-sans: var(--font-inter);
+}
+
+/* 
+  Reset basic styles and enforce B2B catalog look 
+  Bright, clean, structured
+*/
+:root {
+  --background: #f8fafc;
+  --foreground: #1e293b;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar for data tables */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role     @default(ADMIN)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  slug     String    @unique
+  products Product[]
+}
+
+model Brand {
+  id       String    @id @default(uuid())
+  name     String
+  slug     String    @unique
+  products Product[]
+}
+
+model Product {
+  id               String         @id @default(uuid())
+  name             String
+  description      String?        @db.Text
+  price            Decimal?       @db.Decimal(10, 2)
+  part_number      String         @unique
+  clean_part_number String         @unique // For tolerant search
+  part_number_sec  String?
+  weight           String?
+  
+  categoryId       String
+  category         Category       @relation(fields: [categoryId], references: [id])
+  
+  brandId          String
+  brand            Brand          @relation(fields: [brandId], references: [id])
+
+  media            ProductMedia[]
+  quoteItems       QuoteItem[]
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model ProductMedia {
+  id        String    @id @default(uuid())
+  productId String
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  type      MediaType @default(IMAGE_2D)
+  isMain    Boolean   @default(false)
+  order     Int       @default(0)
+}
+
+enum MediaType {
+  IMAGE_2D
+  MODEL_3D
+}
+
+model Quote {
+  id            String      @id @default(uuid())
+  customerName  String
+  customerEmail String
+  customerPhone String
+  companyName   String?
+  message       String?     @db.Text
+  status        QuoteStatus @default(PENDING)
+  items         QuoteItem[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum QuoteStatus {
+  PENDING
+  RESPONDED
+  CANCELLED
+}
+
+model QuoteItem {
+  id        String  @id @default(uuid())
+  quoteId   String
+  quote     Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+}
+
+model SystemSetting {
+  id    String @id @default("singleton")
+  key   String @unique
+  value String
+}
