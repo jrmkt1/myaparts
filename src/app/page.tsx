@@ -68,59 +68,59 @@ export default async function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-industrial-600/50 to-transparent z-10" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full pb-12 pt-8 md:pt-10 md:pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 w-full pb-10 pt-6 md:pt-10 md:pb-16">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-0 items-center">
 
             {/* Left — copy */}
-            <div className="lg:col-span-7 space-y-5">
+            <div className="w-full lg:col-span-7 space-y-5 text-center lg:text-left">
               {/* Live badge */}
-              <div className="hero-badge inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#b0bec5]/30 bg-white/5 text-[#b0bec5] text-[11px] font-extrabold uppercase tracking-[0.2em]">
+              <div className="hero-badge inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#b0bec5]/30 bg-white/5 text-[#b0bec5] text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.2em] mx-auto lg:mx-0">
                 <span className="w-2 h-2 rounded-full bg-[#4caf50] shadow-[0_0_6px_2px_rgba(76,175,80,0.5)] animate-pulse" />
                 Catálogo online · Atualizado agora
               </div>
 
               {/* Headline */}
-              <div>
-                <h1 className="font-extrabold text-white tracking-tight leading-[1.0]">
-                  <span className="hero-line-1 block text-4xl md:text-5xl lg:text-6xl">Peças para</span>
+              <div className="max-w-md mx-auto lg:max-w-none lg:mx-0">
+                <h1 className="font-extrabold text-white tracking-tight leading-[1.1] md:leading-[1.0]">
+                  <span className="hero-line-1 block text-3xl md:text-5xl lg:text-6xl">Peças para</span>
                   <span className="hero-line-2 block text-4xl md:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[#8aa1ba] to-[#b0bec5] mt-1">
                     Empilhadeiras
                   </span>
-                  <span className="hero-line-3 block text-3xl md:text-4xl lg:text-5xl text-white/70 mt-1 font-bold">
+                  <span className="hero-line-3 block text-2xl md:text-4xl lg:text-5xl text-white/70 mt-1 font-bold">
                     na hora certa.
                   </span>
                 </h1>
               </div>
 
               {/* Sub */}
-              <p className="hero-sub text-industrial-400 text-base md:text-lg leading-relaxed max-w-lg font-medium">
-                Catálogo B2B com <strong className="text-white font-extrabold">+50 mil referências OEM</strong> para Toyota, Hyster, Yale e outras marcas. Consulte e solicite orçamento em minutos.
+              <p className="hero-sub text-industrial-400 text-sm md:text-lg leading-relaxed max-w-lg font-medium mx-auto lg:mx-0">
+                Catálogo B2B com <strong className="text-white font-extrabold">+50 mil referências OEM</strong> para Toyota, Hyster e outras marcas. Consulte agora.
               </p>
 
               {/* CTAs */}
-              <div className="hero-ctas flex flex-wrap gap-3">
+              <div className="hero-ctas flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <Link
                   href="/produtos"
-                  className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-white text-industrial-900 rounded-lg font-extrabold text-sm uppercase tracking-widest hover:bg-industrial-100 transition-all shadow-xl shadow-industrial-900/30"
+                  className="w-full sm:w-auto group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-white text-industrial-900 rounded-lg font-extrabold text-xs md:text-sm uppercase tracking-widest hover:bg-industrial-100 transition-all shadow-xl shadow-industrial-900/30"
                 >
-                  Ver Catálogo Completo
+                  Catálogo Completo
                   <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
                 <a
                   href="https://wa.me/5519971441580"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 px-7 py-3.5 border border-white/20 text-white/80 rounded-lg font-bold text-sm uppercase tracking-widest hover:border-white/40 hover:text-white hover:bg-white/5 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 border border-white/20 text-white/80 rounded-lg font-bold text-xs md:text-sm uppercase tracking-widest hover:border-white/40 hover:text-white hover:bg-white/5 transition-all"
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-                  Falar no WhatsApp
+                  WhatsApp
                 </a>
               </div>
 
               {/* Trust indicators */}
-              <div className="hero-trust flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
-                {["Faturamento CNPJ", "Entrega Nacional", "Estoque próprio"].map((item) => (
-                  <span key={item} className="flex items-center gap-1.5 text-xs text-industrial-400 font-medium">
+              <div className="hero-trust flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2 pt-1">
+                {["Faturamento CNPJ", "Estoque próprio"].map((item) => (
+                  <span key={item} className="flex items-center gap-1.5 text-[10px] md:text-xs text-industrial-400 font-medium whitespace-nowrap">
                     <span className="w-1 h-1 rounded-full bg-[#4caf50]" />
                     {item}
                   </span>
@@ -128,30 +128,29 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Right — Stats vertical */}
-            <div className="lg:col-span-5 lg:pl-12 grid grid-cols-2 lg:grid-cols-1 gap-3">
+            {/* Right — Stats grid */}
+            <div className="w-full lg:col-span-5 lg:pl-12 grid grid-cols-3 lg:grid-cols-1 gap-2 md:gap-3">
               {[
-                { number: "50K+", label: "Referências OEM catalogadas", accent: true, cls: "hero-stat-1" },
-                { number: "24h", label: "Acesso ao catálogo online", accent: false, cls: "hero-stat-2" },
-                { number: "B2B", label: "Faturamento para CNPJ", accent: false, cls: "hero-stat-3" },
+                { number: "50K+", label: "Peças", accent: true, cls: "hero-stat-1" },
+                { number: "24h", label: "Online", accent: false, cls: "hero-stat-2" },
+                { number: "B2B", label: "CNPJ", accent: false, cls: "hero-stat-3" },
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className={`${stat.cls} flex items-center gap-4 p-4 lg:p-5 rounded-xl border transition-colors ${stat.accent
+                  className={`${stat.cls} flex flex-col md:flex-row items-center justify-center lg:justify-start gap-1 md:gap-4 p-3 md:p-5 rounded-xl border transition-colors ${stat.accent
                     ? "bg-action/20 border-action/30"
                     : "bg-white/5 border-white/10 hover:bg-white/8"
                     }`}
                 >
-                  <div className={`text-3xl lg:text-4xl font-extrabold tracking-tight shrink-0 ${stat.accent ? "text-white" : "text-[#b0bec5]"}`}>
+                  <div className={`text-xl md:text-3xl lg:text-4xl font-extrabold tracking-tight shrink-0 ${stat.accent ? "text-white" : "text-[#b0bec5]"}`}>
                     {stat.number}
                   </div>
-                  <div className="text-xs text-industrial-400 font-bold uppercase tracking-widest leading-snug">
+                  <div className="text-[8px] md:text-xs text-industrial-400 font-bold uppercase tracking-widest text-center md:text-left leading-snug">
                     {stat.label}
                   </div>
                 </div>
               ))}
             </div>
-
           </div>
         </div>
 

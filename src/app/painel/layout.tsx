@@ -20,9 +20,11 @@ export default async function PainelLayout({ children }: { children: ReactNode }
         <div className="flex h-screen bg-industrial-100 font-sans">
             {/* Sidebar */}
             <aside className="w-64 bg-industrial-900 text-white flex flex-col shadow-2xl z-10 hidden md:flex">
-                <div className="p-6 border-b border-industrial-800 flex flex-col">
-                    <h2 className="text-2xl font-extrabold tracking-tight">MYA <span className="text-action">PARTS</span></h2>
-                    <span className="text-xs text-industrial-400 font-semibold tracking-widest mt-1">SISTEMA ADMIN</span>
+                <div className="p-6 border-b border-industrial-800 flex flex-col items-start justify-center">
+                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[120px] object-contain mb-1" />
+                    <span className="text-[10px] text-industrial-400 font-bold uppercase tracking-[0.2em] mt-2">
+                        Sistema Admin
+                    </span>
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2 text-sm font-medium overflow-y-auto">
@@ -71,7 +73,7 @@ export default async function PainelLayout({ children }: { children: ReactNode }
             {/* Main Content */}
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <header className="h-16 bg-white border-b border-industrial-200 flex items-center justify-between px-6 shadow-sm md:hidden">
-                    <h2 className="font-bold text-industrial-900">MYA PARTS Admin</h2>
+                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[100px] object-contain" />
                     <form action={logoutAction}><button className="text-sm text-red-500 font-bold">Sair</button></form>
                 </header>
 

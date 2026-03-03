@@ -46,7 +46,9 @@ export default function Header() {
     return (
         <>
             <header
-                className={`w-full font-sans z-50 sticky top-0 transition-all duration-300 ${scrolled ? "shadow-lg shadow-industrial-900/10" : "shadow-sm"
+                className={`w-full font-sans z-50 sticky top-0 transition-all duration-500 ${scrolled
+                    ? "bg-white/95 backdrop-blur-md shadow-lg shadow-industrial-900/5 py-1 md:py-0"
+                    : "bg-white shadow-sm"
                     }`}
             >
                 {/* ── Top bar ── */}
@@ -71,31 +73,32 @@ export default function Header() {
 
                 {/* ── Main header — WHITE ── */}
                 <div className="bg-white border-b border-industrial-200">
-                    <div className="max-w-7xl mx-auto px-4 md:px-8 min-h-[110px] py-4 flex items-center gap-8">
+                    <div className="max-w-7xl mx-auto px-4 md:px-8 min-h-[100px] md:min-h-[120px] py-6 md:py-5 flex items-center justify-between md:justify-start gap-4 md:gap-10">
 
                         {/* Logo */}
                         <Link
                             href="/"
-                            className="flex flex-col items-start shrink-0 group"
+                            className="flex flex-col items-start shrink-0 group py-1"
                             aria-label="MYA Parts - Início"
                         >
-                            <Image
-                                src="/mya-logo.png"
-                                alt="MYA Parts Logo"
-                                width={140}
-                                height={66}
-                                className="my-3 object-contain group-hover:opacity-80 transition-opacity"
-                                priority
-                            />
-                            <span className="text-[10px] text-industrial-900 font-extrabold tracking-[0.25em] whitespace-nowrap mt-1 group-hover:text-action transition-colors">
+                            <div className="relative w-[130px] h-[62px] md:w-[150px] md:h-[72px]">
+                                <Image
+                                    src="/mya-logo.png"
+                                    alt="MYA Parts Logo"
+                                    fill
+                                    className="object-contain group-hover:opacity-80 transition-opacity"
+                                    priority
+                                />
+                            </div>
+                            <span className="text-[9px] md:text-[11px] text-industrial-900 font-extrabold tracking-[0.25em] whitespace-nowrap mt-1 group-hover:text-action transition-colors">
                                 FORKLIFT PARTS
                             </span>
                         </Link>
 
-                        {/* Search — flex-1 center */}
+                        {/* Search — flex-1 center (Desktop only in this row) */}
                         <form
                             onSubmit={handleSearch}
-                            className="flex-1 max-w-2xl mx-auto flex items-center"
+                            className="hidden md:flex flex-1 max-w-2xl mx-auto items-center"
                         >
                             <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg hover:border-industrial-400 focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
                                 <input
@@ -115,13 +118,13 @@ export default function Header() {
                             </div>
                         </form>
 
-                        {/* Right — Cart */}
-                        <div className="flex items-center gap-3 shrink-0">
+                        {/* Right — Actions */}
+                        <div className="flex items-center gap-2 md:gap-3 shrink-0">
                             <Link href="/orcamento" className="group flex items-center gap-2.5" aria-label="Meu Orçamento">
-                                <div className="relative p-2.5 bg-industrial-100 rounded-xl group-hover:bg-industrial-200 transition-colors border border-industrial-200/50">
-                                    <ShoppingCart size={20} className="text-industrial-900" />
+                                <div className="relative p-2 md:p-2.5 bg-industrial-100 rounded-xl group-hover:bg-industrial-200 transition-colors border border-industrial-200/50">
+                                    <ShoppingCart size={18} className="md:size-[20px] text-industrial-900" />
                                     {mounted && totalItems > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-industrial-900 text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center rounded-full border border-white shadow-sm">
+                                        <span className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 bg-industrial-900 text-white text-[9px] md:text-[10px] font-extrabold w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full border border-white shadow-sm">
                                             {totalItems > 99 ? "99+" : totalItems}
                                         </span>
                                     )}
@@ -134,14 +137,39 @@ export default function Header() {
 
                             {/* Mobile hamburger */}
                             <button
-                                onClick={() => setMobileOpen((o) => !o)}
+                                onClick={() => setMobileOpen(!mobileOpen)}
                                 aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
                                 aria-expanded={mobileOpen}
-                                className="md:hidden p-2 rounded-lg text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all"
+                                className="md:hidden p-2.5 rounded-xl text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all border border-transparent hover:border-industrial-200"
                             >
-                                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                                {mobileOpen ? <X size={24} /> : <Menu size={24} />}
                             </button>
                         </div>
+                    </div>
+
+                    {/* Mobile Search Row */}
+                    <div className="md:hidden px-6 pb-6">
+                        <form
+                            onSubmit={handleSearch}
+                            className="w-full"
+                        >
+                            <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
+                                <Search size={14} className="ml-3 text-industrial-400" />
+                                <input
+                                    ref={pathname === '/' ? undefined : searchRef} // Avoid conflict for initial page
+                                    type="text"
+                                    name="q"
+                                    placeholder="OEM, nome ou marca..."
+                                    className="w-full px-2 py-2.5 bg-transparent outline-none text-xs font-medium text-industrial-900 placeholder:text-industrial-400"
+                                />
+                                <button
+                                    type="submit"
+                                    className="mr-1.5 px-3 py-1.5 bg-industrial-900 text-white rounded-md text-[10px] font-bold uppercase"
+                                >
+                                    Buscar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -165,47 +193,49 @@ export default function Header() {
                         </ul>
                     </div>
                 </nav>
-            </header>
+            </header >
 
             {/* Mobile Drawer */}
-            {mobileOpen && (
-                <div className="md:hidden fixed inset-0 z-40 flex">
-                    <div
-                        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-                        onClick={() => setMobileOpen(false)}
-                    />
-                    <nav className="relative ml-auto w-72 max-w-full h-full bg-white shadow-2xl flex flex-col overflow-y-auto">
-                        <div className="flex items-center justify-between p-4 border-b border-industrial-200">
-                            <span className="text-industrial-900 font-extrabold text-sm uppercase tracking-widest">Menu</span>
-                            <button
-                                onClick={() => setMobileOpen(false)}
-                                className="p-1.5 rounded-lg text-industrial-500 hover:text-industrial-900 hover:bg-industrial-100 transition-all"
-                            >
-                                <X size={18} />
-                            </button>
-                        </div>
-                        <ul className="flex-1 py-4 px-2 space-y-0.5">
-                            {NAV_LINKS.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className="flex items-center justify-between px-4 py-3 rounded-lg text-sm font-bold text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all uppercase tracking-wider"
-                                    >
-                                        {link.label}
-                                        <ChevronRight size={14} className="opacity-40" />
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="p-4 border-t border-industrial-200">
-                            <a href="tel:+551199999999" className="flex items-center gap-2 text-industrial-500 text-sm font-medium">
-                                <Phone size={14} />
-                                (11) 9999-9999
-                            </a>
-                        </div>
-                    </nav>
-                </div>
-            )}
+            {
+                mobileOpen && (
+                    <div className="md:hidden fixed inset-0 z-40 flex">
+                        <div
+                            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                            onClick={() => setMobileOpen(false)}
+                        />
+                        <nav className="relative ml-auto w-72 max-w-full h-full bg-white shadow-2xl flex flex-col overflow-y-auto">
+                            <div className="flex items-center justify-between p-4 border-b border-industrial-200">
+                                <span className="text-industrial-900 font-extrabold text-sm uppercase tracking-widest">Menu</span>
+                                <button
+                                    onClick={() => setMobileOpen(false)}
+                                    className="p-1.5 rounded-lg text-industrial-500 hover:text-industrial-900 hover:bg-industrial-100 transition-all"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+                            <ul className="flex-1 py-4 px-2 space-y-0.5">
+                                {NAV_LINKS.map((link) => (
+                                    <li key={link.href}>
+                                        <Link
+                                            href={link.href}
+                                            className="flex items-center justify-between px-4 py-3 rounded-lg text-sm font-bold text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all uppercase tracking-wider"
+                                        >
+                                            {link.label}
+                                            <ChevronRight size={14} className="opacity-40" />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="p-4 border-t border-industrial-200">
+                                <a href="tel:+551199999999" className="flex items-center gap-2 text-industrial-500 text-sm font-medium">
+                                    <Phone size={14} />
+                                    (11) 9999-9999
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
+                )
+            }
         </>
     );
 }

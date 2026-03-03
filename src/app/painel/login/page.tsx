@@ -13,10 +13,10 @@ export default function LoginPage() {
                 <div>
                     <div className="flex justify-center mb-6">
                         <Image
-                            src="/logo-mya.png"
+                            src="/mya-logo.png"
                             alt="MYA Parts Logo"
-                            width={250}
-                            height={80}
+                            width={200}
+                            height={90}
                             className="object-contain"
                             priority
                         />
