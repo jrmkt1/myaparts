@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { createProductAction } from "@/actions/products";
 import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,9 @@ type ProductFormProps = {
 
 export default function ProductForm({ categories, brands }: ProductFormProps) {
     const router = useRouter();
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState("");
+    const [uploadedUrl, setUploadedUrl] = useState("");
 
     // In React 19, useActionState manages the transition
     // state is the returned object from our createProductAction action
@@ -112,17 +115,59 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                 />
             </div>
 
-            <div className="space-y-2 pt-6 border-t border-industrial-100 bg-industrial-50 p-6 rounded-lg border-2 border-dashed border-industrial-300">
+            <div className="space-y-4 pt-6 border-t border-industrial-100 bg-industrial-50 p-6 rounded-lg border-2 border-dashed border-industrial-300">
                 <h4 className="text-sm font-bold text-industrial-800 uppercase tracking-widest">Mídia do Produto</h4>
-                <p className="text-xs text-action font-semibold block mb-4">
-                    MVP: Insira uma URL de imagem direta. Mais tarde ligaremos nosso uploader Hostinger nativo.
+                <p className="text-xs text-industrial-500 font-semibold block">
+                    Faça o upload da foto diretamente para o servidor da MYA Parts (Hostinger).
                 </p>
-                <input
-                    type="url"
-                    name="imageUrl"
-                    placeholder="https://sua-imagem.com/foto.jpg"
-                    className="w-full px-4 py-3 bg-white border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 placeholder:text-industrial-400 outline-none transition-all shadow-inner"
-                />
+
+                <div className="flex flex-col gap-2">
+                    <input
+                        type="file"
+                        accept="image/png, image/jpeg, image/webp"
+                        onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+
+                            setIsUploading(true);
+                            setUploadError("");
+
+                            try {
+                                const formData = new FormData();
+                                formData.append("file", file);
+
+                                const res = await fetch("/api/upload", {
+                                    method: "POST",
+                                    body: formData
+                                });
+
+                                const data = await res.json();
+                                if (data.success) {
+                                    setUploadedUrl(data.url);
+                                } else {
+                                    setUploadError(data.error || "Erro no upload");
+                                }
+                            } catch (err) {
+                                setUploadError("Falha de rede ao tentar subir a foto.");
+                            } finally {
+                                setIsUploading(false);
+                            }
+                        }}
+                        className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-industrial-200 file:text-industrial-900 hover:file:bg-industrial-300 focus:outline-none"
+                    />
+
+                    {isUploading && <span className="text-sm text-action font-bold animate-pulse">Aguarde, enviando foto para a nuvem...</span>}
+                    {uploadError && <span className="text-sm text-red-600 font-bold">{uploadError}</span>}
+                    {uploadedUrl && (
+                        <div className="mt-2 text-sm text-green-600 font-bold flex flex-col gap-2">
+                            <span>✅ Imagem salva com sucesso!</span>
+                            <img src={uploadedUrl} alt="Preview" className="w-24 h-24 object-cover border border-industrial-200 rounded-md shadow-sm" />
+                        </div>
+                    )}
+
+                    {/* Hidden input para mandar a URL na string do form original */}
+                    <input type="hidden" name="imageUrl" value={uploadedUrl} />
+                </div>
             </div>
 
             {state?.error && (

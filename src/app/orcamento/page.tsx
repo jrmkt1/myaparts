@@ -123,7 +123,19 @@ export default function OrcamentoClient() {
                                 const result = await submitQuoteAction(formData);
 
                                 if (result.success) {
-                                    alert("Orçamento enviado com Sucesso! Retornaremos via Email/WhatsApp.");
+                                    alert("Orçamento enviado com Sucesso! Estaremos redirecionando para o nosso WhatsApp.");
+
+                                    // Generate WhatsApp Message
+                                    const baseUrl = "https://wa.me/5519971441580";
+                                    let message = `Olá, vim do site MYA Parts e acabei de solicitar um orçamento (Pedido #${result.quoteId}).\n\n*Meu Cadastro:*\n- Nome: ${formData.get("customerName")}\n- Empresa: ${formData.get("companyName") || "N/A"}\n- E-mail: ${formData.get("customerEmail")}\n\n*Minhas Peças:*\n`;
+
+                                    items.forEach(i => {
+                                        message += `- ${i.quantity}x ${i.product.name} (PN: ${i.product.part_number})\n`;
+                                    });
+
+                                    const encodedMessage = encodeURIComponent(message);
+                                    window.open(`${baseUrl}?text=${encodedMessage}`, "_blank");
+
                                     clearCart();
                                 } else if (result.error) {
                                     alert(result.error);
