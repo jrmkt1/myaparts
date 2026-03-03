@@ -24,11 +24,11 @@ export async function GET() {
                 `"${(p.category?.name || "").replace(/"/g, '""')}"`,
                 `"${(p.brand?.name || "").replace(/"/g, '""')}"`,
                 `"${(p.weight || "").replace(/"/g, '""')}"`,
-                p.price ? p.price.toString() : ""
-            ].join(",");
+                `"${p.price ? p.price.toString().replace('.', ',') : ""}"`
+            ].join(";");
         });
 
-        const csvContent = [headers.join(","), ...rows].join("\n");
+        const csvContent = [headers.join(";"), ...rows].join("\n");
 
         // Use UTF-8 BOM to ensure Excel opens special characters correctly
         const bom = "\uFEFF";
