@@ -171,3 +171,16 @@ body {
 .scroll-bounce {
   animation: scrollBounce 1.8s ease-in-out infinite;
 }
+
+/* ── Cookie banner animation ── */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

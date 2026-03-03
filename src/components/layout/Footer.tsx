@@ -40,8 +40,8 @@ export default function Footer() {
                     <ul className="space-y-2 text-sm text-industrial-400 font-medium tracking-wide">
                         <li><Link href="/sobre" className="hover:text-white transition-colors">Sobre Nós</Link></li>
                         <li><Link href="/como-orcamento" className="hover:text-white transition-colors">Como enviar orçamento?</Link></li>
-                        <li><Link href="/politica-privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link></li>
-                        <li><Link href="/termos" className="hover:text-white transition-colors">Termos de Uso</Link></li>
+                        <li><Link href="/politica-de-privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link></li>
+                        <li><Link href="/politica-de-cookies" className="hover:text-white transition-colors">Política de Cookies</Link></li>
                         <li><Link href="/painel" className="hover:text-white transition-colors font-bold mt-2 inline-block">Acesso Administrativo</Link></li>
                     </ul>
                 </div>

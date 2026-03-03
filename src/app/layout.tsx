@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import CookieBanner from "@/components/layout/CookieBanner";
 import MaintenanceScreen from "@/components/layout/MaintenanceScreen";
 import { headers } from "next/headers";
 import { getMaintenanceMode } from "@/actions/settings";
@@ -54,6 +55,7 @@ export default async function RootLayout({
           {children}
         </main>
         <Footer />
+        <CookieBanner />
       </body>
     </html>
   );
