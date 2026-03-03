@@ -90,9 +90,6 @@ export default function Header() {
                                     priority
                                 />
                             </div>
-                            <span className="text-[9px] md:text-[11px] text-industrial-900 font-extrabold tracking-[0.25em] whitespace-nowrap mt-1 group-hover:text-action transition-colors">
-                                FORKLIFT PARTS
-                            </span>
                         </Link>
 
                         {/* Search — flex-1 center (Desktop only in this row) */}

@@ -11,7 +11,6 @@ export default function MaintenanceScreen() {
 
                 <div className="flex flex-col items-center justify-center gap-1">
                     <Image src="/mya-logo.png" alt="MYA Parts Logo" width={140} height={80} className="object-contain brightness-0 invert opacity-90" priority />
-                    <span className="text-[11px] text-white font-extrabold tracking-[0.25em] whitespace-nowrap mt-2">FORKLIFT PARTS</span>
                 </div>
 
                 <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-industrial-400">

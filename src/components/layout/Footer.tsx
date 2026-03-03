@@ -15,7 +15,6 @@ export default function Footer() {
                 <div className="space-y-4">
                     <Link href="/" className="flex flex-col items-start shrink-0 group">
                         <Image src="/mya-logo.png" alt="MYA Parts Logo" width={110} height={60} className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity" priority />
-                        <span className="text-[10px] text-white font-extrabold tracking-[0.25em] whitespace-nowrap group-hover:text-industrial-400 transition-colors mt-2">FORKLIFT PARTS</span>
                     </Link>
                     <p className="text-sm text-industrial-400 leading-relaxed mt-4">
                         Especialistas em reposição de peças para maquinário industrial e empilhadeiras. Oferecemos o portfólio completo com busca imediata de códigos.
