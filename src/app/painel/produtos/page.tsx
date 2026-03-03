@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus, Edit, Trash2, Image as ImageIcon, Box } from "lucide-react";
-
+import MassImportButton from "@/components/admin/MassImportButton";
 export default async function ProdutosPage() {
     // Fetch products sorted by creation date with their main category and brand
     const products = await db.product.findMany({
@@ -25,13 +25,16 @@ export default async function ProdutosPage() {
                         Gerencie todas as peças. Adicione fotos 2D e Modelos 3D interativos.
                     </p>
                 </div>
-                <Link
-                    href="/painel/produtos/novo"
-                    className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-white px-6 py-3 rounded-md font-bold transition-colors shadow-sm whitespace-nowrap"
-                >
-                    <Plus size={18} />
-                    Nova Peça
-                </Link>
+                <div className="flex items-center gap-3">
+                    <MassImportButton />
+                    <Link
+                        href="/painel/produtos/novo"
+                        className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-white px-6 py-3 rounded-md font-bold transition-colors shadow-sm whitespace-nowrap"
+                    >
+                        <Plus size={18} />
+                        Nova Peça
+                    </Link>
+                </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-industrial-200 overflow-hidden">

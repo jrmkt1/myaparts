@@ -1,104 +1,211 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Phone, Search, ShoppingCart, User } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Search, ShoppingCart, Menu, X, Phone, User, ChevronRight } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+
+const NAV_LINKS = [
+    { href: "/produtos", label: "Catálogo Completo" },
+    { href: "/busca?q=motor", label: "Motor" },
+    { href: "/busca?q=freio", label: "Freio" },
+    { href: "/busca?q=hidraulico", label: "Hidráulico" },
+    { href: "/busca?q=eletrico", label: "Elétrico" },
+    { href: "/busca?q=transmissao", label: "Transmissão" },
+    { href: "/busca?q=rolamento", label: "Rolamentos" },
+];
 
 export default function Header() {
     const [mounted, setMounted] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const searchRef = useRef<HTMLInputElement>(null);
+
     const totalItems = useCartStore((state) => state.getTotalItems());
+    const pathname = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         setMounted(true);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        const handleScroll = () => setScrolled(window.scrollY > 10);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const pathname = usePathname();
+    useEffect(() => { setMobileOpen(false); }, [pathname]);
+
     if (pathname?.startsWith("/painel")) return null;
 
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const q = searchRef.current?.value.trim();
+        if (q) router.push(`/busca?q=${encodeURIComponent(q)}`);
+    };
+
     return (
-        <header className="w-full bg-white shadow-sm font-sans flex flex-col z-50 relative">
-            {/* Top Bar - Contacts & Actions */}
-            <div className="bg-industrial-900 text-industrial-100 py-1.5 px-4 md:px-8 flex justify-between items-center text-xs font-medium tracking-wide">
-                <div className="flex items-center space-x-4">
-                    <span className="flex items-center gap-2">
-                        <Phone size={12} className="text-industrial-400" />
-                        <span className="hidden md:inline text-industrial-200">Atendimento:</span> (11) 9999-9999
-                    </span>
-                    <span className="hidden md:inline-block text-industrial-600">|</span>
-                    <span className="hidden md:inline text-industrial-200">Peças Especiais para Empilhadeiras</span>
-                </div>
-                <div className="flex items-center space-x-6">
-                    <Link href="/painel" className="text-industrial-400 hover:text-white transition-colors flex items-center gap-1.5 uppercase text-[10px] tracking-widest font-bold">
-                        <User size={12} /> <span className="hidden md:inline">Painel Administrativo</span>
+        <>
+            <header
+                className={`w-full font-sans z-50 sticky top-0 transition-all duration-300 ${scrolled ? "shadow-lg shadow-industrial-900/10" : "shadow-sm"
+                    }`}
+            >
+                {/* ── Top bar ── */}
+                <div className="bg-industrial-900 text-industrial-200 py-1.5 px-4 md:px-8 flex justify-between items-center text-xs font-medium tracking-wide">
+                    <div className="flex items-center gap-4">
+                        <span className="flex items-center gap-1.5">
+                            <Phone size={11} className="text-industrial-400" />
+                            <span className="hidden md:inline text-industrial-400">Atendimento:</span>
+                            (11) 9999-9999
+                        </span>
+                        <span className="hidden md:inline text-industrial-600">|</span>
+                        <span className="hidden md:inline text-industrial-400">Peças Especiais para Empilhadeiras</span>
+                    </div>
+                    <Link
+                        href="/painel"
+                        className="flex items-center gap-1.5 text-industrial-400 hover:text-white transition-colors uppercase text-[10px] tracking-widest font-bold"
+                    >
+                        <User size={11} />
+                        <span className="hidden md:inline">Painel Administrativo</span>
                     </Link>
                 </div>
-            </div>
 
-            {/* Main Header */}
-            <div className="py-5 px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6 relative">
-                {/* Logo - Embedded Image */}
-                <Link href="/" className="flex flex-col items-center md:items-start shrink-0 group">
-                    <Image src="/mya-logo.png" alt="MYA Parts Logo" width={110} height={60} className="object-contain group-hover:opacity-80 transition-opacity" priority />
-                    <span className="text-[10px] text-industrial-900 font-extrabold tracking-[0.25em] whitespace-nowrap mt-1 group-hover:text-action transition-colors">FORKLIFT PARTS</span>
-                </Link>
+                {/* ── Main header — WHITE ── */}
+                <div className="bg-white border-b border-industrial-200">
+                    <div className="max-w-7xl mx-auto px-4 md:px-8 min-h-[110px] py-4 flex items-center gap-8">
 
-                {/* Search Engine Center */}
-                <div className="flex-1 w-full max-w-2xl px-4">
-                    <form action="/busca" method="GET" className="relative flex items-center group">
-                        <input
-                            type="text"
-                            name="q"
-                            placeholder="Buscar por código OEM, nome, marca..."
-                            className="w-full pl-5 pr-14 py-3 bg-industrial-100/50 border border-industrial-200 focus:border-industrial-400 focus:bg-white rounded-xl text-industrial-900 placeholder:text-industrial-400 outline-none transition-all shadow-inner text-sm font-medium"
-                        />
-                        <button
-                            type="submit"
-                            className="absolute right-1.5 p-1.5 bg-industrial-900 hover:bg-action text-white rounded-lg transition-colors shadow-sm"
-                            aria-label="Buscar"
+                        {/* Logo */}
+                        <Link
+                            href="/"
+                            className="flex flex-col items-start shrink-0 group"
+                            aria-label="MYA Parts - Início"
                         >
-                            <Search size={18} />
-                        </button>
-                    </form>
+                            <Image
+                                src="/mya-logo.png"
+                                alt="MYA Parts Logo"
+                                width={140}
+                                height={66}
+                                className="my-3 object-contain group-hover:opacity-80 transition-opacity"
+                                priority
+                            />
+                            <span className="text-[10px] text-industrial-900 font-extrabold tracking-[0.25em] whitespace-nowrap mt-1 group-hover:text-action transition-colors">
+                                FORKLIFT PARTS
+                            </span>
+                        </Link>
+
+                        {/* Search — flex-1 center */}
+                        <form
+                            onSubmit={handleSearch}
+                            className="flex-1 max-w-2xl mx-auto flex items-center"
+                        >
+                            <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg hover:border-industrial-400 focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
+                                <input
+                                    ref={searchRef}
+                                    type="text"
+                                    name="q"
+                                    placeholder="Buscar por código OEM, nome, marca..."
+                                    className="w-full px-4 py-3 bg-transparent outline-none text-sm font-medium text-industrial-900 placeholder:text-industrial-400"
+                                />
+                                <button
+                                    type="submit"
+                                    aria-label="Buscar"
+                                    className="mr-1.5 p-2 bg-industrial-900 hover:bg-action text-white rounded-md transition-colors shrink-0"
+                                >
+                                    <Search size={16} />
+                                </button>
+                            </div>
+                        </form>
+
+                        {/* Right — Cart */}
+                        <div className="flex items-center gap-3 shrink-0">
+                            <Link href="/orcamento" className="group flex items-center gap-2.5" aria-label="Meu Orçamento">
+                                <div className="relative p-2.5 bg-industrial-100 rounded-xl group-hover:bg-industrial-200 transition-colors border border-industrial-200/50">
+                                    <ShoppingCart size={20} className="text-industrial-900" />
+                                    {mounted && totalItems > 0 && (
+                                        <span className="absolute -top-2 -right-2 bg-industrial-900 text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center rounded-full border border-white shadow-sm">
+                                            {totalItems > 99 ? "99+" : totalItems}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="hidden lg:flex flex-col leading-tight">
+                                    <span className="text-[10px] text-industrial-400 font-bold uppercase tracking-wider">Meu Orçamento</span>
+                                    <span className="text-sm font-extrabold text-industrial-900 group-hover:text-action transition-colors">Abrir Lista</span>
+                                </div>
+                            </Link>
+
+                            {/* Mobile hamburger */}
+                            <button
+                                onClick={() => setMobileOpen((o) => !o)}
+                                aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+                                aria-expanded={mobileOpen}
+                                className="md:hidden p-2 rounded-lg text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all"
+                            >
+                                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Quote Cart */}
-                <div className="flex shrink-0">
-                    <Link href="/orcamento" className="group flex items-center gap-3">
-                        <div className="relative p-2.5 bg-industrial-100 rounded-xl group-hover:bg-industrial-200 transition-colors border border-industrial-200/50 shadow-sm">
-                            <ShoppingCart size={22} className="text-industrial-900" />
-                            {mounted && totalItems > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-industrial-900 text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center rounded-full border border-white shadow-sm">
-                                    {totalItems > 99 ? '99+' : totalItems}
-                                </span>
-                            )}
-                        </div>
-                        <div className="hidden lg:flex flex-col">
-                            <span className="text-[10px] text-industrial-400 font-bold uppercase tracking-wider">Meu Orçamento</span>
-                            <span className="text-sm font-extrabold text-industrial-900 group-hover:text-action transition-colors">Abrir Lista</span>
-                        </div>
-                    </Link>
-                </div>
-            </div>
+                {/* ── Sub-nav — WHITE ── */}
+                <nav className="hidden md:block bg-white border-b border-industrial-200">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <ul className="flex items-center gap-0 overflow-x-auto hide-scrollbar py-0">
+                            {NAV_LINKS.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className={`block px-5 py-4 text-[11px] font-bold uppercase tracking-widest transition-colors whitespace-nowrap border-b-2 ${pathname === link.href
+                                            ? "text-industrial-900 border-action"
+                                            : "text-industrial-500 border-transparent hover:text-industrial-900 hover:border-industrial-300"
+                                            }`}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </nav>
+            </header>
 
-            {/* Categories Navigation */}
-            <nav className="bg-industrial-100/50 border-y border-industrial-200 px-4 md:px-8">
-                <ul className="flex items-center justify-center md:justify-start gap-8 overflow-x-auto whitespace-nowrap py-2.5 hide-scrollbar text-xs font-bold text-industrial-600 uppercase tracking-widest">
-                    <li><Link href="/produtos" className="hover:text-industrial-900 transition-colors">Catálogo Completo</Link></li>
-                    <li className="w-px h-3 bg-industrial-300"></li>
-                    <li><Link href="/busca?q=motor" className="hover:text-industrial-900 transition-colors">Motor</Link></li>
-                    <li><Link href="/busca?q=freio" className="hover:text-industrial-900 transition-colors">Freio</Link></li>
-                    <li><Link href="/busca?q=hidraulico" className="hover:text-industrial-900 transition-colors">Hidráulico</Link></li>
-                    <li><Link href="/busca?q=eletrico" className="hover:text-industrial-900 transition-colors">Elétrico</Link></li>
-                    <li className="w-px h-3 bg-industrial-300"></li>
-                    <li><Link href="/busca?q=toyota" className="hover:text-industrial-900 transition-colors">Toyota</Link></li>
-                    <li><Link href="/busca?q=hyster" className="hover:text-industrial-900 transition-colors">Hyster</Link></li>
-                    <li><Link href="/busca?q=yale" className="hover:text-industrial-900 transition-colors">Yale</Link></li>
-                </ul>
-            </nav>
-        </header>
+            {/* Mobile Drawer */}
+            {mobileOpen && (
+                <div className="md:hidden fixed inset-0 z-40 flex">
+                    <div
+                        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                        onClick={() => setMobileOpen(false)}
+                    />
+                    <nav className="relative ml-auto w-72 max-w-full h-full bg-white shadow-2xl flex flex-col overflow-y-auto">
+                        <div className="flex items-center justify-between p-4 border-b border-industrial-200">
+                            <span className="text-industrial-900 font-extrabold text-sm uppercase tracking-widest">Menu</span>
+                            <button
+                                onClick={() => setMobileOpen(false)}
+                                className="p-1.5 rounded-lg text-industrial-500 hover:text-industrial-900 hover:bg-industrial-100 transition-all"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
+                        <ul className="flex-1 py-4 px-2 space-y-0.5">
+                            {NAV_LINKS.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className="flex items-center justify-between px-4 py-3 rounded-lg text-sm font-bold text-industrial-600 hover:text-industrial-900 hover:bg-industrial-100 transition-all uppercase tracking-wider"
+                                    >
+                                        {link.label}
+                                        <ChevronRight size={14} className="opacity-40" />
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="p-4 border-t border-industrial-200">
+                            <a href="tel:+551199999999" className="flex items-center gap-2 text-industrial-500 text-sm font-medium">
+                                <Phone size={14} />
+                                (11) 9999-9999
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            )}
+        </>
     );
 }
