@@ -11,9 +11,16 @@ export default function LoginPage() {
         <div className="min-h-screen bg-industrial-100 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 md:p-10 rounded-xl shadow-xl border border-industrial-200">
                 <div>
-                    <h2 className="mt-2 text-center text-3xl font-extrabold text-industrial-900 tracking-tight">
-                        MYA <span className="text-action">PARTS</span>
-                    </h2>
+                    <div className="flex justify-center mb-6">
+                        <Image
+                            src="/logo-mya.png"
+                            alt="MYA Parts Logo"
+                            width={250}
+                            height={80}
+                            className="object-contain"
+                            priority
+                        />
+                    </div>
                     <p className="mt-2 text-center text-sm text-industrial-400 font-semibold uppercase tracking-widest">
                         Acesso Restrito
                     </p>
