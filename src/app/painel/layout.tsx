@@ -21,7 +21,7 @@ export default async function PainelLayout({ children }: { children: ReactNode }
             {/* Sidebar */}
             <aside className="w-64 bg-industrial-900 text-white flex flex-col shadow-2xl z-10 hidden md:flex">
                 <div className="p-6 border-b border-industrial-800 flex flex-col items-start justify-center">
-                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[120px] object-contain mb-1 brightness-0 invert opacity-90" />
+                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[150px] h-auto object-contain mb-1 brightness-0 invert opacity-90" />
                     <span className="text-[10px] text-industrial-400 font-bold uppercase tracking-[0.2em] mt-2">
                         Sistema Admin
                     </span>
@@ -73,7 +73,7 @@ export default async function PainelLayout({ children }: { children: ReactNode }
             {/* Main Content */}
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <header className="h-16 bg-white border-b border-industrial-200 flex items-center justify-between px-6 shadow-sm md:hidden">
-                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[100px] object-contain" />
+                    <img src="/mya-logo.png" alt="MYA Parts Logo" className="w-[120px] h-auto object-contain" />
                     <form action={logoutAction}><button className="text-sm text-red-500 font-bold">Sair</button></form>
                 </header>
 

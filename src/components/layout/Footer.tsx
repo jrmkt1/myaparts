@@ -14,7 +14,7 @@ export default function Footer() {
                 {/* Branding matching MYA Logo closely */}
                 <div className="space-y-4">
                     <Link href="/" className="flex flex-col items-start shrink-0 group">
-                        <Image src="/mya-logo.png" alt="MYA Parts Logo" width={110} height={60} className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity" priority />
+                        <Image src="/mya-logo.png" alt="MYA Parts Logo" width={140} height={70} className="w-[140px] h-auto object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity" priority />
                     </Link>
                     <p className="text-sm text-industrial-400 leading-relaxed mt-4">
                         Especialistas em reposição de peças para maquinário industrial e empilhadeiras. Oferecemos o portfólio completo com busca imediata de códigos.

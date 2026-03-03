@@ -15,9 +15,9 @@ export default function LoginPage() {
                         <Image
                             src="/mya-logo.png"
                             alt="MYA Parts Logo"
-                            width={200}
-                            height={90}
-                            className="object-contain"
+                            width={220}
+                            height={110}
+                            className="w-[200px] h-auto object-contain"
                             priority
                         />
                     </div>

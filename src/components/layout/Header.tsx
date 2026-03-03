@@ -81,15 +81,14 @@ export default function Header() {
                             className="flex flex-col items-start shrink-0 group py-1"
                             aria-label="MYA Parts - Início"
                         >
-                            <div className="relative w-[130px] h-[62px] md:w-[150px] md:h-[72px]">
-                                <Image
-                                    src="/mya-logo.png"
-                                    alt="MYA Parts Logo"
-                                    fill
-                                    className="object-contain group-hover:opacity-80 transition-opacity"
-                                    priority
-                                />
-                            </div>
+                            <Image
+                                src="/mya-logo.png"
+                                alt="MYA Parts Logo"
+                                width={200}
+                                height={80}
+                                className="w-[150px] md:w-[200px] h-auto object-contain group-hover:opacity-80 transition-opacity"
+                                priority
+                            />
                         </Link>
 
                         {/* Search — flex-1 center (Desktop only in this row) */}
