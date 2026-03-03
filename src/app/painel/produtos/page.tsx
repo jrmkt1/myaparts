@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Plus, Edit, Image as ImageIcon, Search } from "lucide-react";
+import { Plus, Edit, Image as ImageIcon, Search, Download } from "lucide-react";
 import MassImportButton from "@/components/admin/MassImportButton";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 
@@ -37,7 +37,15 @@ export default async function ProdutosPage(props: { searchParams: Promise<{ q?: 
                         Gerencie todas as peças. Adicione fotos 2D e Modelos 3D interativos.
                     </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+                    <a
+                        href="/api/produtos/exportar"
+                        className="inline-flex items-center gap-2 bg-white hover:bg-industrial-100 text-industrial-900 border border-industrial-200 px-4 py-3 rounded-md font-bold transition-colors shadow-sm whitespace-nowrap text-sm"
+                        title="Baixar Planilha (CSV)"
+                    >
+                        <Download size={16} />
+                        <span className="hidden sm:inline">Exportar Produtos</span>
+                    </a>
                     <MassImportButton />
                     <Link
                         href="/painel/produtos/novo"
