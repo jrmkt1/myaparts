@@ -20,7 +20,6 @@ export default function Header() {
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const searchRef = useRef<HTMLInputElement>(null);
 
     const totalItems = useCartStore((state) => state.getTotalItems());
     const pathname = usePathname();
@@ -39,7 +38,8 @@ export default function Header() {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const q = searchRef.current?.value.trim();
+        const formData = new FormData(e.currentTarget);
+        const q = formData.get("q")?.toString().trim();
         if (q) router.push(`/busca?q=${encodeURIComponent(q)}`);
     };
 
@@ -98,7 +98,6 @@ export default function Header() {
                         >
                             <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg hover:border-industrial-400 focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
                                 <input
-                                    ref={searchRef}
                                     type="text"
                                     name="q"
                                     placeholder="Buscar por código OEM, nome, marca..."
@@ -152,7 +151,6 @@ export default function Header() {
                             <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
                                 <Search size={14} className="ml-3 text-industrial-400" />
                                 <input
-                                    ref={pathname === '/' ? undefined : searchRef} // Avoid conflict for initial page
                                     type="text"
                                     name="q"
                                     placeholder="OEM, nome ou marca..."
