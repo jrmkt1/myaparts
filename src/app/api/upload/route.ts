@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
         // Obter credenciais via variaveis
         const host = process.env.FTP_HOST || "82.25.67.181";
         const user = process.env.FTP_USER || "u187455536";
-        const password = process.env.FTP_PASSWORD || "Byd24VEay74KbH";
+        const password = process.env.FTP_PASSWORD || "byd24VEay@74KbH";
 
         // Conectar via FTP Moderno (basic-ftp)
         const client = new ftp.Client();
