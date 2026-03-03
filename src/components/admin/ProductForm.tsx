@@ -1,27 +1,49 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { createProductAction } from "@/actions/products";
+import { createProductAction, updateProductAction } from "@/actions/products";
 import { Save } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+// Define the shape of initialData for type safety
+type InitialProductData = {
+    id: string;
+    name: string;
+    part_number: string;
+    part_number_sec?: string | null;
+    categoryId: string;
+    brandId: string;
+    description?: string | null;
+    price?: number | null;
+    media?: { url: string }[];
+};
 
 type ProductFormProps = {
     categories: { id: string; name: string }[];
     brands: { id: string; name: string }[];
+    initialData?: InitialProductData | null;
 };
 
-export default function ProductForm({ categories, brands }: ProductFormProps) {
+export default function ProductForm({ categories, brands, initialData }: ProductFormProps) {
     const router = useRouter();
     const [isUploading, setIsUploading] = useState(false);
     const [uploadError, setUploadError] = useState("");
-    const [uploadedUrl, setUploadedUrl] = useState("");
+
+    // If we have initialData, try to find a main image to pre-populate
+    const initialImageUrl = initialData?.media?.[0]?.url || "";
+    const [uploadedUrl, setUploadedUrl] = useState(initialImageUrl);
 
     // In React 19, useActionState manages the transition
     // state is the returned object from our createProductAction action
     const [state, formAction, isPending] = useActionState(
         async (prevState: unknown, formData: FormData) => {
-            const result = await createProductAction(formData);
-            return result;
+            if (initialData?.id) {
+                // Edit mode
+                return await updateProductAction(initialData.id, formData);
+            } else {
+                // Create mode
+                return await createProductAction(formData);
+            }
         },
         null
     );
@@ -43,6 +65,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                         required
                         type="text"
                         name="name"
+                        defaultValue={initialData?.name || ""}
                         placeholder="Ex: Bomba Hidráulica Auxiliar"
                         className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 placeholder:text-industrial-400 outline-none transition-all shadow-inner"
                     />
@@ -54,6 +77,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                         required
                         type="text"
                         name="part_number"
+                        defaultValue={initialData?.part_number || ""}
                         placeholder="Ex: 5800-449-33"
                         className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 font-mono font-bold placeholder:text-industrial-400 outline-none transition-all shadow-inner"
                     />
@@ -67,6 +91,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                     <input
                         type="text"
                         name="part_number_sec"
+                        defaultValue={initialData?.part_number_sec || ""}
                         placeholder="Opcional"
                         className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 font-mono font-bold placeholder:text-industrial-400 outline-none transition-all shadow-inner"
                     />
@@ -79,7 +104,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                     <select
                         required
                         name="categoryId"
-                        defaultValue=""
+                        defaultValue={initialData?.categoryId || ""}
                         className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 font-bold outline-none transition-all shadow-inner appearance-none cursor-pointer"
                     >
                         <option value="" disabled>Selecione o Sistema...</option>
@@ -94,7 +119,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                     <select
                         required
                         name="brandId"
-                        defaultValue=""
+                        defaultValue={initialData?.brandId || ""}
                         className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 font-bold outline-none transition-all shadow-inner appearance-none cursor-pointer"
                     >
                         <option value="" disabled>Selecione a Montadora...</option>
@@ -110,6 +135,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                 <textarea
                     name="description"
                     rows={3}
+                    defaultValue={initialData?.description || ""}
                     placeholder="Informações adicionais da peça..."
                     className="w-full px-4 py-3 bg-industrial-100 border border-transparent focus:bg-white focus:border-action rounded-md text-industrial-900 placeholder:text-industrial-400 outline-none transition-all shadow-inner resize-y"
                 />
@@ -187,7 +213,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
                     ) : (
                         <>
                             <Save size={18} />
-                            Salvar Nova Peça
+                            {initialData ? "Atualizar Peça" : "Salvar Nova Peça"}
                         </>
                     )}
                 </button>

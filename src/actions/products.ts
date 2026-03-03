@@ -54,3 +54,72 @@ export async function createProductAction(formData: FormData) {
         return { error: "Erro interno no servidor ao cadastrar produto." };
     }
 }
+
+export async function updateProductAction(productId: string, formData: FormData) {
+    try {
+        const name = formData.get("name") as string;
+        const part_number = formData.get("part_number") as string;
+        const part_number_sec = formData.get("part_number_sec") as string | null;
+        const description = formData.get("description") as string;
+        const price = formData.get("price") ? parseFloat(formData.get("price") as string) : null;
+        const categoryId = formData.get("categoryId") as string;
+        const brandId = formData.get("brandId") as string;
+
+        const fakeImageURL = formData.get("imageUrl") as string | null;
+
+        if (!name || !part_number || !categoryId || !brandId) {
+            return { error: "Campos obrigatórios: Nome, Part Number, Categoria e Marca." };
+        }
+
+        const clean_part_number = cleanPartNumber(part_number);
+
+        // Update basic text data
+        await db.product.update({
+            where: { id: productId },
+            data: {
+                name,
+                part_number,
+                part_number_sec,
+                clean_part_number,
+                description,
+                price,
+                categoryId,
+                brandId,
+            }
+        });
+
+        // Only update image if a new one was uploaded
+        if (fakeImageURL) {
+            // we delete previous ones for simplicity in this MVP
+            await db.productMedia.deleteMany({ where: { productId } });
+            await db.productMedia.create({
+                data: {
+                    productId,
+                    url: fakeImageURL,
+                    type: "IMAGE_2D",
+                    isMain: true
+                }
+            });
+        }
+
+        revalidatePath("/painel/produtos");
+        return { success: true, productId };
+
+    } catch (error) {
+        console.error("[UPDATE_PRODUCT_ERROR]", error);
+        return { error: "Erro interno no servidor ao atualizar o produto." };
+    }
+}
+
+export async function deleteProductAction(productId: string) {
+    try {
+        await db.product.delete({
+            where: { id: productId }
+        });
+        revalidatePath("/painel/produtos");
+        return { success: true };
+    } catch (error) {
+        console.error("[DELETE_PRODUCT_ERROR]", error);
+        return { error: "Erro interno no servidor ao excluir o produto." };
+    }
+}

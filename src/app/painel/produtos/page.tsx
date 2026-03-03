@@ -1,10 +1,22 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Plus, Edit, Trash2, Image as ImageIcon, Box } from "lucide-react";
+import { Plus, Edit, Image as ImageIcon, Search } from "lucide-react";
 import MassImportButton from "@/components/admin/MassImportButton";
-export default async function ProdutosPage() {
-    // Fetch products sorted by creation date with their main category and brand
+import DeleteProductButton from "@/components/admin/DeleteProductButton";
+
+export default async function ProdutosPage(props: { searchParams: Promise<{ q?: string }> }) {
+    const searchParams = await props.searchParams;
+    const q = searchParams?.q || "";
+
+    // Fetch products, with optional filtering
     const products = await db.product.findMany({
+        where: q ? {
+            OR: [
+                { name: { contains: q } },
+                { part_number: { contains: q } },
+                { clean_part_number: { contains: q.replace(/[-.\s+_]/g, "").toUpperCase() } },
+            ]
+        } : undefined,
         include: {
             category: true,
             brand: true,
@@ -36,6 +48,28 @@ export default async function ProdutosPage() {
                     </Link>
                 </div>
             </div>
+
+            {/* FIlter and Search Bar */}
+            <form method="GET" action="/painel/produtos" className="bg-white rounded-xl shadow-sm border border-industrial-200 p-4 flex gap-3">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-industrial-400" size={18} />
+                    <input
+                        type="text"
+                        name="q"
+                        defaultValue={q}
+                        placeholder="Buscar por nome ou part number..."
+                        className="w-full pl-10 pr-4 py-2 border border-industrial-200 rounded-md focus:outline-none focus:ring-2 focus:ring-action focus:border-action transition-all"
+                    />
+                </div>
+                <button type="submit" className="bg-industrial-900 hover:bg-black text-white px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm">
+                    Buscar
+                </button>
+                {q && (
+                    <Link href="/painel/produtos" className="bg-industrial-100 hover:bg-industrial-200 text-industrial-800 px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm flex items-center justify-center">
+                        Limpar
+                    </Link>
+                )}
+            </form>
 
             <div className="bg-white rounded-xl shadow-sm border border-industrial-200 overflow-hidden">
                 <div className="overflow-x-auto">
@@ -96,9 +130,8 @@ export default async function ProdutosPage() {
                                                 <Link href={`/painel/produtos/${product.id}/editar`} className="text-industrial-400 hover:text-action transition-colors" title="Editar">
                                                     <Edit size={18} />
                                                 </Link>
-                                                <button className="text-industrial-400 hover:text-red-500 transition-colors" title="Excluir">
-                                                    <Trash2 size={18} />
-                                                </button>
+
+                                                <DeleteProductButton productId={product.id} />
                                             </div>
                                         </td>
                                     </tr>
