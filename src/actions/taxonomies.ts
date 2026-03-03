@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function createCategoryAction(prevState: any, formData: FormData) {
+export async function createCategoryAction(prevState: unknown, formData: FormData) {
     try {
         const name = formData.get("name") as string;
         if (!name || name.trim() === "") {
@@ -36,7 +36,7 @@ export async function createCategoryAction(prevState: any, formData: FormData) {
     }
 }
 
-export async function createBrandAction(prevState: any, formData: FormData) {
+export async function createBrandAction(prevState: unknown, formData: FormData) {
     try {
         const name = formData.get("name") as string;
         if (!name || name.trim() === "") {

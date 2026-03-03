@@ -16,7 +16,7 @@ export default function ProductForm({ categories, brands }: ProductFormProps) {
     // In React 19, useActionState manages the transition
     // state is the returned object from our createProductAction action
     const [state, formAction, isPending] = useActionState(
-        async (prevState: any, formData: FormData) => {
+        async (prevState: unknown, formData: FormData) => {
             const result = await createProductAction(formData);
             return result;
         },

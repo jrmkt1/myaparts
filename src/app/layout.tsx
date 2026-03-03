@@ -32,7 +32,7 @@ export default async function RootLayout({
     const headersList = await headers();
     const pathname = headersList.get('x-pathname') || "";
     isPainelRoute = pathname.startsWith('/painel') || pathname.startsWith('/api') || pathname.startsWith('/_next') || pathname.startsWith('/favicon');
-  } catch (e) {
+  } catch {
     // fallback if prisma or headers fail during initial build
   }
 

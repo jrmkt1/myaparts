@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
+
 
 export async function submitQuoteAction(formData: FormData) {
     try {
@@ -30,7 +30,7 @@ export async function submitQuoteAction(formData: FormData) {
                 companyName,
                 status: "PENDING",
                 items: {
-                    create: items.map((item: any) => ({
+                    create: items.map((item: { productId: string; quantity: number }) => ({
                         productId: item.productId,
                         quantity: item.quantity
                     }))
