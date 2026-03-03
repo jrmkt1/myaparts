@@ -194,7 +194,7 @@ export default function Header() {
             {/* Mobile Drawer */}
             {
                 mobileOpen && (
-                    <div className="md:hidden fixed inset-0 z-40 flex">
+                    <div className="md:hidden fixed inset-0 z-[60] flex">
                         <div
                             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
                             onClick={() => setMobileOpen(false)}
