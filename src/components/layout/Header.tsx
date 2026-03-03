@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Search, ShoppingCart, Menu, X, Phone, User, ChevronRight } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import AutocompleteSearch from "./AutocompleteSearch";
 
 const NAV_LINKS = [
     { href: "/produtos", label: "Catálogo Completo" },
@@ -35,13 +36,6 @@ export default function Header() {
     useEffect(() => { setMobileOpen(false); }, [pathname]);
 
     if (pathname?.startsWith("/painel")) return null;
-
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const q = formData.get("q")?.toString().trim();
-        if (q) router.push(`/busca?q=${encodeURIComponent(q)}`);
-    };
 
     return (
         <>
@@ -92,26 +86,7 @@ export default function Header() {
                         </Link>
 
                         {/* Search — flex-1 center (Desktop only in this row) */}
-                        <form
-                            onSubmit={handleSearch}
-                            className="hidden md:flex flex-1 max-w-2xl mx-auto items-center"
-                        >
-                            <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg hover:border-industrial-400 focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
-                                <input
-                                    type="text"
-                                    name="q"
-                                    placeholder="Buscar por código OEM, nome, marca..."
-                                    className="w-full px-4 py-3 bg-transparent outline-none text-sm font-medium text-industrial-900 placeholder:text-industrial-400"
-                                />
-                                <button
-                                    type="submit"
-                                    aria-label="Buscar"
-                                    className="mr-1.5 p-2 bg-industrial-900 hover:bg-action text-white rounded-md transition-colors shrink-0"
-                                >
-                                    <Search size={16} />
-                                </button>
-                            </div>
-                        </form>
+                        <AutocompleteSearch variant="desktop" />
 
                         {/* Right — Actions */}
                         <div className="flex items-center gap-2 md:gap-3 shrink-0">
@@ -144,26 +119,7 @@ export default function Header() {
 
                     {/* Mobile Search Row */}
                     <div className="md:hidden px-6 pb-6">
-                        <form
-                            onSubmit={handleSearch}
-                            className="w-full"
-                        >
-                            <div className="w-full flex items-center bg-industrial-100/60 border border-industrial-200 rounded-lg focus-within:border-industrial-400 focus-within:bg-white focus-within:shadow-md transition-all">
-                                <Search size={14} className="ml-3 text-industrial-400" />
-                                <input
-                                    type="text"
-                                    name="q"
-                                    placeholder="OEM, nome ou marca..."
-                                    className="w-full px-2 py-2.5 bg-transparent outline-none text-xs font-medium text-industrial-900 placeholder:text-industrial-400"
-                                />
-                                <button
-                                    type="submit"
-                                    className="mr-1.5 px-3 py-1.5 bg-industrial-900 text-white rounded-md text-[10px] font-bold uppercase"
-                                >
-                                    Buscar
-                                </button>
-                            </div>
-                        </form>
+                        <AutocompleteSearch variant="mobile" />
                     </div>
                 </div>
 
