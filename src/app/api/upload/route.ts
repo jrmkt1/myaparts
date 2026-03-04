@@ -2,15 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { v2 as cloudinary } from "cloudinary";
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 export async function POST(req: NextRequest) {
     try {
+        // Verificar se as variáveis do Cloudinary estão presentes
+        const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+        const apiKey = process.env.CLOUDINARY_API_KEY;
+        const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+        if (!cloudName || !apiKey || !apiSecret) {
+            console.error("[UPLOAD] Variáveis Cloudinary ausentes:", {
+                cloudName: !!cloudName,
+                apiKey: !!apiKey,
+                apiSecret: !!apiSecret,
+            });
+            return NextResponse.json(
+                { error: `Configuração do Cloudinary incompleta. Verifique as variáveis de ambiente.` },
+                { status: 500 }
+            );
+        }
+
+        // Configurar Cloudinary dentro do handler (garante leitura em runtime na Vercel)
+        cloudinary.config({
+            cloud_name: cloudName,
+            api_key: apiKey,
+            api_secret: apiSecret,
+        });
+
         const session = await auth();
         // Apenas ADMIN pode enviar fotos
         if (!session || session.user.role !== "ADMIN") {
@@ -39,10 +56,11 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ success: true, url: result.secure_url });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("[UPLOAD_CLOUDINARY_ERROR]", error);
+        const message = error?.message || "Erro desconhecido";
         return NextResponse.json(
-            { error: "Falha ao enviar imagem. Tente novamente." },
+            { error: `Falha no upload: ${message}` },
             { status: 500 }
         );
     }
