@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+
 import Link from "next/link";
 import { Package, Tag, Layers, FileText, LogOut, Settings } from "lucide-react";
 import { logoutAction } from "@/actions/auth";
@@ -8,12 +9,9 @@ import { logoutAction } from "@/actions/auth";
 export default async function PainelLayout({ children }: { children: ReactNode }) {
     const session = await auth();
 
-    // For /painel/login we return raw children (layout is handled there)
-    // We can't use headers() reliably for pathname, so we assume if there's no session, Next.js Middleware already handled it,
-    // EXCEPT when the user is explicitly on /painel/login (middleware lets it pass).
-    // This layout wraps EVERY route in /painel. To avoid showing the sidebar on the login page:
+    // Se NÃO tem sessão → redireciona
     if (!session) {
-        return <>{children}</>;
+        redirect("/painel/login");
     }
 
     return (
