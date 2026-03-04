@@ -78,9 +78,9 @@ export default function Header() {
                             <Image
                                 src="/mya-logo.png"
                                 alt="MYA Parts Logo"
-                                width={160}
-                                height={64}
-                                className="w-[120px] md:w-[160px] h-auto object-contain group-hover:opacity-80 transition-opacity"
+                                width={130}
+                                height={52}
+                                className="w-[100px] md:w-[130px] h-auto object-contain group-hover:opacity-80 transition-opacity"
                                 priority
                             />
                         </Link>
