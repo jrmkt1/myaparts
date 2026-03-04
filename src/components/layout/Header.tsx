@@ -56,13 +56,6 @@ export default function Header() {
                         <span className="hidden md:inline text-industrial-600">|</span>
                         <span className="hidden md:inline text-industrial-400">Peças Especiais para Empilhadeiras</span>
                     </div>
-                    <Link
-                        href="/painel"
-                        className="flex items-center gap-1.5 text-industrial-400 hover:text-white transition-colors uppercase text-[10px] tracking-widest font-bold"
-                    >
-                        <User size={11} />
-                        <span className="hidden md:inline">Painel Administrativo</span>
-                    </Link>
                 </div>
 
                 {/* ── Main header — WHITE ── */}
