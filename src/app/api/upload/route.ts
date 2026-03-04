@@ -48,22 +48,28 @@ export async function POST(req: NextRequest) {
         const mimeType = file.type || "image/png";
         const dataUri = `data:${mimeType};base64,${base64}`;
 
-        // Upload para o Cloudinary COM marca d'água do logo MYA
+        // Upload para o Cloudinary (imagem original)
         const result = await cloudinary.uploader.upload(dataUri, {
             folder: "myaparts/produtos",
-            resource_type: "auto",
+            resource_type: "image",
+        });
+
+        // Construir URL com marca d'água do logo MYA embutida
+        const watermarkedUrl = cloudinary.url(result.public_id, {
+            secure: true,
             transformation: [
+                { quality: "auto", fetch_format: "auto" },
                 {
                     overlay: "myaparts:watermark-logo",
-                    width: "0.35",
+                    width: "0.30",
                     flags: "relative",
-                    opacity: 40,
+                    opacity: 35,
                     gravity: "center",
                 },
             ],
         });
 
-        return NextResponse.json({ success: true, url: result.secure_url });
+        return NextResponse.json({ success: true, url: watermarkedUrl });
 
     } catch (error: any) {
         console.error("[UPLOAD_CLOUDINARY_ERROR]", error);
