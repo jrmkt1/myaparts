@@ -48,10 +48,19 @@ export async function POST(req: NextRequest) {
         const mimeType = file.type || "image/png";
         const dataUri = `data:${mimeType};base64,${base64}`;
 
-        // Upload para o Cloudinary
+        // Upload para o Cloudinary COM marca d'água do logo MYA
         const result = await cloudinary.uploader.upload(dataUri, {
             folder: "myaparts/produtos",
             resource_type: "auto",
+            transformation: [
+                {
+                    overlay: "myaparts:watermark-logo",
+                    width: "0.35",
+                    flags: "relative",
+                    opacity: 40,
+                    gravity: "center",
+                },
+            ],
         });
 
         return NextResponse.json({ success: true, url: result.secure_url });
