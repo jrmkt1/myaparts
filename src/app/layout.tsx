@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/layout/CookieBanner";
 import MaintenanceScreen from "@/components/layout/MaintenanceScreen";
+import Chatbot from "@/components/chat/Chatbot";
 import { headers } from "next/headers";
 import { getMaintenanceMode } from "@/actions/settings";
 
@@ -56,6 +57,7 @@ export default async function RootLayout({
         </main>
         <Footer />
         <CookieBanner />
+        <Chatbot />
       </body>
     </html>
   );

@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^0.0.18",
     "@prisma/client": "^6.19.2",
+    "ai": "^3.1.36",
     "basic-ftp": "^5.2.0",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
