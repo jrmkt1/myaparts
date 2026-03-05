@@ -57,7 +57,7 @@ export default async function RootLayout({
         </main>
         <Footer />
         <CookieBanner />
-        <Chatbot />
+        {/* <Chatbot /> */}
       </body>
     </html>
   );
