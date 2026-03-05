@@ -29,7 +29,7 @@ export default function Footer() {
                         <li><Link href="/busca?q=freio" className="hover:text-white transition-colors">Sistema de Freio</Link></li>
                         <li><Link href="/busca?q=hidraulico" className="hover:text-white transition-colors">Sistema Hidráulico</Link></li>
                         <li><Link href="/busca?q=eletrico" className="hover:text-white transition-colors">Sistema Elétrico</Link></li>
-                        <li><Link href="/marcas" className="hover:text-white transition-colors">Ver todas as Marcas</Link></li>
+                        <li><Link href="/produtos" className="hover:text-white transition-colors">Ver todas as Peças</Link></li>
                     </ul>
                 </div>
 
