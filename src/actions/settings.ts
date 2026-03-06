@@ -2,8 +2,14 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function toggleMaintenanceMode(currentState: boolean) {
+    const session = await auth();
+    if (!session || session.user.role !== "ADMIN") {
+        throw new Error("Não autorizado.");
+    }
+
     await db.systemSetting.upsert({
         where: { key: "MAINTENANCE_MODE" },
         update: { value: currentState ? "false" : "true" },

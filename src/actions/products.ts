@@ -3,9 +3,15 @@
 import { db } from "@/lib/db";
 import { cleanPartNumber } from "@/lib/utils/search";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function createProductAction(formData: FormData) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         const name = formData.get("name") as string;
         const part_number = formData.get("part_number") as string;
         const part_number_sec = formData.get("part_number_sec") as string | null;
@@ -57,6 +63,11 @@ export async function createProductAction(formData: FormData) {
 
 export async function updateProductAction(productId: string, formData: FormData) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         const name = formData.get("name") as string;
         const part_number = formData.get("part_number") as string;
         const part_number_sec = formData.get("part_number_sec") as string | null;
@@ -113,6 +124,11 @@ export async function updateProductAction(productId: string, formData: FormData)
 
 export async function deleteProductAction(productId: string) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         await db.product.delete({
             where: { id: productId }
         });

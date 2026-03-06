@@ -12,7 +12,6 @@ const eslintConfig = defineConfig([
       "react/no-unescaped-entities": "off",
       "@next/next/no-img-element": "off",
       "react-hooks/exhaustive-deps": "off",
-      "react-hooks/rules-of-hooks": "off",
       "react-hooks/set-state-in-effect": "off"
     }
   },

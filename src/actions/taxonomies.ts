@@ -2,9 +2,15 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function createCategoryAction(prevState: unknown, formData: FormData) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         const name = formData.get("name") as string;
         if (!name || name.trim() === "") {
             return { error: "O nome da categoria é obrigatório." };
@@ -38,6 +44,11 @@ export async function createCategoryAction(prevState: unknown, formData: FormDat
 
 export async function createBrandAction(prevState: unknown, formData: FormData) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         const name = formData.get("name") as string;
         if (!name || name.trim() === "") {
             return { error: "O nome da marca é obrigatório." };

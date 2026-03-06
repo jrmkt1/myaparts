@@ -2,7 +2,7 @@
 
 import { useChat } from 'ai/react';
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, User, Wrench, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Wrench, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
@@ -12,14 +12,15 @@ export default function Chatbot() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
 
-    // Do not show on admin panel
-    if (pathname?.startsWith("/painel")) return null;
-
+    // Hook MUST be called before any conditional return (React rules of hooks)
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [messages, isOpen]);
+
+    // Do not show on admin panel
+    if (pathname?.startsWith("/painel")) return null;
 
     return (
         <>
@@ -98,7 +99,7 @@ export default function Chatbot() {
                                             : 'bg-white text-industrial-800 border border-industrial-200 rounded-bl-none'
                                             }`}
                                     >
-                                        <div dangerouslySetInnerHTML={{ __html: m.content.replace(/\n(.*)/g, '<br/>$1') }} />
+                                        <p className="whitespace-pre-wrap">{m.content}</p>
                                     </div>
                                 </div>
                             </div>

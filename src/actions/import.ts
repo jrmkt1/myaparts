@@ -3,9 +3,15 @@
 import { db } from "@/lib/db";
 import * as xlsx from "xlsx";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function importProductsAction(formData: FormData) {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         const file = formData.get("file") as File;
         if (!file) {
             return { error: "Nenhum arquivo enviado." };

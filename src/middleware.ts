@@ -2,12 +2,29 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-    // Passo 1: Clona os cabeçalhos recebidos
-    const requestHeaders = new Headers(request.headers);
-    // Passo 2: Define o cabeçalho novo com o caminho atual
-    requestHeaders.set('x-pathname', request.nextUrl.pathname);
+    const { pathname } = request.nextUrl;
 
-    // Passo 3: Retorna a resposta passando essa "nova Request" pra frente pra o Layout conseguir ler!
+    // Step 1: Protect admin routes (except login page)
+    // Check for the session cookie — the actual auth validation happens
+    // in the (admin)/layout.tsx server component which has full Prisma access.
+    // This middleware is a fast guard to redirect unauthenticated browsers
+    // before they even hit the page render.
+    if (pathname.startsWith("/painel") && !pathname.startsWith("/painel/login")) {
+        const sessionCookie =
+            request.cookies.get("authjs.session-token") ||
+            request.cookies.get("__Secure-authjs.session-token");
+
+        if (!sessionCookie) {
+            const loginUrl = new URL("/painel/login", request.url);
+            loginUrl.searchParams.set("callbackUrl", pathname);
+            return NextResponse.redirect(loginUrl);
+        }
+    }
+
+    // Step 2: Clone headers and inject x-pathname for Layout usage
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-pathname', pathname);
+
     return NextResponse.next({
         request: {
             headers: requestHeaders,
@@ -16,5 +33,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'], // Corre em tudo menos recursos estáticos
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|api/auth).*)'],
 }

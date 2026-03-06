@@ -1,8 +1,14 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 export async function GET() {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return new NextResponse("Não autorizado", { status: 401 });
+        }
+
         const products = await db.product.findMany({
             include: {
                 category: true,

@@ -15,9 +15,14 @@ export async function submitQuoteAction(formData: FormData) {
             return { error: "Por favor, preencha todos os campos obrigatórios." };
         }
 
-        const items = JSON.parse(itemsRaw);
+        let items;
+        try {
+            items = JSON.parse(itemsRaw);
+        } catch {
+            return { error: "Dados do carrinho inválidos. Tente novamente." };
+        }
 
-        if (items.length === 0) {
+        if (!Array.isArray(items) || items.length === 0) {
             return { error: "Seu carrinho de orçamento está vazio." };
         }
 

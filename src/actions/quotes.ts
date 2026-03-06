@@ -2,9 +2,15 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 export async function updateQuoteStatusAction(quoteId: string, status: "PENDING" | "RESPONDED" | "CANCELLED") {
     try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
         await db.quote.update({
             where: { id: quoteId },
             data: { status }
