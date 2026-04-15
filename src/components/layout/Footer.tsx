@@ -38,6 +38,7 @@ export default function Footer() {
                     <h3 className="text-lg font-bold mb-4 text-white uppercase tracking-widest text-sm">Institucional</h3>
                     <ul className="space-y-2 text-sm text-industrial-400 font-medium tracking-wide">
                         <li><Link href="/sobre" className="hover:text-white transition-colors">Sobre Nós</Link></li>
+                        <li><Link href="/contato" className="hover:text-white transition-colors">Contato</Link></li>
                         <li><Link href="/como-orcamento" className="hover:text-white transition-colors">Como enviar orçamento?</Link></li>
                         <li><Link href="/politica-de-privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link></li>
                         <li><Link href="/politica-de-cookies" className="hover:text-white transition-colors">Política de Cookies</Link></li>
@@ -52,26 +53,28 @@ export default function Footer() {
                             <Phone className="shrink-0 text-white mt-0.5" size={16} />
                             <span>
                                 <strong className="text-white font-medium uppercase tracking-wider text-xs block mb-0.5">Atendimento Comercial</strong>
-                                (11) 9999-9999
+                                <a href="https://wa.me/5519971441580" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">(19) 97144-1580</a>
                             </span>
                         </li>
                         <li className="flex items-center gap-3">
                             <Mail className="shrink-0 text-white" size={16} />
-                            <span>vendas@myaparts.com.br</span>
+                            <a href="mailto:myapartsforklift@gmail.com" className="hover:text-white transition-colors">myapartsforklift@gmail.com</a>
                         </li>
                         <li className="flex items-start gap-3 mt-2">
                             <MapPin className="shrink-0 text-white mt-0.5" size={16} />
                             <span>
-                                Av. Industrial, 1000 - Galpão 5<br />
-                                São Paulo - SP
+                                Rua Eduardo Cesar Rocha, 276<br />
+                                Parque Santa Candida — Araras/SP<br />
+                                CEP 13603-181
                             </span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto border-t border-industrial-800 mt-12 pt-6 text-center text-xs text-industrial-600 font-bold uppercase tracking-widest">
-                <p>&copy; {new Date().getFullYear()} MYA FORKLIFT PARTS. Todos os direitos reservados.</p>
+            <div className="max-w-7xl mx-auto border-t border-industrial-800 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-industrial-600 font-bold uppercase tracking-widest">
+                <p>&copy; {new Date().getFullYear()} MYA PARTS MATERIAL HANDLING LTDA. Todos os direitos reservados.</p>
+                <p className="text-industrial-700">CNPJ 62.401.620/0001-90</p>
             </div>
         </footer>
     );

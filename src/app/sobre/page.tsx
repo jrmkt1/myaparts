@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Building2, Target, History, Settings } from "lucide-react";
-import Image from "next/image";
+import { ArrowLeft, Building2, Target, History, Settings, MapPin, Phone, Mail, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Sobre Nós | MYA Parts",
@@ -43,6 +42,7 @@ export default function SobrePage() {
                 </Link>
 
                 <div className="space-y-12">
+                    {/* História */}
                     <section className="bg-white rounded-3xl border border-industrial-200 p-8 md:p-12 shadow-sm">
                         <h2 className="text-2xl font-extrabold text-industrial-900 mb-6 flex items-center gap-3">
                             <History size={24} className="text-action" />
@@ -61,6 +61,7 @@ export default function SobrePage() {
                         </div>
                     </section>
 
+                    {/* Missão e Diferencial */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <section className="bg-white rounded-3xl border border-industrial-200 p-8 shadow-sm hover:border-industrial-300 transition-colors">
                             <h2 className="text-xl font-extrabold text-industrial-900 mb-4 flex items-center gap-3 border-b border-industrial-100 pb-4">
@@ -82,6 +83,79 @@ export default function SobrePage() {
                             </p>
                         </section>
                     </div>
+
+                    {/* Dados da Empresa */}
+                    <section className="bg-white rounded-3xl border border-industrial-200 p-8 md:p-12 shadow-sm">
+                        <h2 className="text-2xl font-extrabold text-industrial-900 mb-8 flex items-center gap-3">
+                            <FileText size={24} className="text-action" />
+                            Dados da Empresa
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            {/* Dados Cadastrais */}
+                            <div className="space-y-5">
+                                <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-industrial-400 border-b border-industrial-100 pb-3">
+                                    Informações Cadastrais
+                                </h3>
+                                <dl className="space-y-5">
+                                    <div>
+                                        <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-0.5">Razão Social</dt>
+                                        <dd className="text-industrial-900 font-semibold">Mya Parts Material Handling Ltda</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-0.5">CNPJ</dt>
+                                        <dd className="text-industrial-900 font-semibold font-mono">62.401.620/0001-90</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-0.5">Inscrição Estadual</dt>
+                                        <dd className="text-industrial-900 font-semibold font-mono">182348309114</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-0.5">Data de Abertura</dt>
+                                        <dd className="text-industrial-900 font-semibold">Agosto de 2025</dd>
+                                    </div>
+                                </dl>
+                            </div>
+
+                            {/* Localização e Contato */}
+                            <div className="space-y-5">
+                                <h3 className="text-xs font-extrabold uppercase tracking-[0.2em] text-industrial-400 border-b border-industrial-100 pb-3">
+                                    Localização &amp; Contato
+                                </h3>
+                                <ul className="space-y-5">
+                                    <li className="flex items-start gap-3">
+                                        <MapPin size={18} className="text-action shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-industrial-900 font-semibold leading-snug">
+                                                Rua Eduardo Cesar Rocha, 276<br />
+                                                Parque Santa Candida — Araras/SP
+                                            </p>
+                                            <p className="text-industrial-400 text-sm mt-0.5 font-mono">CEP 13603-181</p>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <Mail size={18} className="text-action shrink-0" />
+                                        <a
+                                            href="mailto:myapartsforklift@gmail.com"
+                                            className="text-industrial-900 font-semibold hover:text-action transition-colors"
+                                        >
+                                            myapartsforklift@gmail.com
+                                        </a>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <Phone size={18} className="text-action shrink-0" />
+                                        <a
+                                            href="https://wa.me/5519971441580"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-industrial-900 font-semibold hover:text-action transition-colors"
+                                        >
+                                            (19) 97144-1580
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>

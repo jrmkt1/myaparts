@@ -51,7 +51,7 @@ export default function Header() {
                         <span className="flex items-center gap-1.5">
                             <Phone size={11} className="text-industrial-400" />
                             <span className="hidden md:inline text-industrial-400">Atendimento:</span>
-                            (11) 9999-9999
+                            (19) 97144-1580
                         </span>
                         <span className="hidden md:inline text-industrial-600">|</span>
                         <span className="hidden md:inline text-industrial-400">Peças Especiais para Empilhadeiras</span>
@@ -170,9 +170,9 @@ export default function Header() {
                                 ))}
                             </ul>
                             <div className="p-4 border-t border-industrial-200">
-                                <a href="tel:+551199999999" className="flex items-center gap-2 text-industrial-500 text-sm font-medium">
+                                <a href="tel:+5519971441580" className="flex items-center gap-2 text-industrial-500 text-sm font-medium">
                                     <Phone size={14} />
-                                    (11) 9999-9999
+                                    (19) 97144-1580
                                 </a>
                             </div>
                         </nav>

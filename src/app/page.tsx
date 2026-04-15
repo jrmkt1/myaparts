@@ -311,7 +311,7 @@ export default async function Home() {
               WhatsApp
             </a>
             <a
-              href="mailto:vendas@myaparts.com.br"
+              href="mailto:myapartsforklift@gmail.com"
               className="inline-flex items-center gap-2 px-5 py-3 border border-white/20 text-white/80 rounded-lg font-bold text-sm uppercase tracking-widest hover:border-white/40 hover:text-white transition-colors"
             >
               E-mail
