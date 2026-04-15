@@ -1,19 +1,30 @@
 import { db } from "@/lib/db";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Package } from "lucide-react";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function TodosProdutosPage() {
-    const products = await db.product.findMany({
-        include: {
-            category: true,
-            brand: true,
-            media: { where: { isMain: true }, take: 1 }
-        },
-        orderBy: { createdAt: "desc" },
-        take: 100,
-    });
+    const [products, topBrands] = await Promise.all([
+        db.product.findMany({
+            include: {
+                category: true,
+                brand: true,
+                media: { where: { isMain: true }, take: 1 }
+            },
+            orderBy: { createdAt: "desc" },
+            take: 100,
+        }),
+        db.brand.findMany({
+            where: {
+                products: { some: {} },
+                name: { notIn: ["Genérica", "GENÉRICA", "Generica"] }
+            },
+            take: 20,
+            orderBy: { products: { _count: "desc" } }
+        })
+    ]);
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 min-h-[60vh]">
@@ -29,6 +40,26 @@ export default async function TodosProdutosPage() {
                         : "Navegue por todas as peças disponíveis"}
                 </p>
             </div>
+
+            {/* BRANDS */}
+            {topBrands.length > 0 && (
+                <div className="mb-8 bg-industrial-100/50 p-6 rounded-xl border border-industrial-200">
+                    <h2 className="text-sm font-extrabold text-industrial-900 uppercase tracking-wider mb-4">
+                        Peças para as principais marcas de empilhadeiras do mercado
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                        {topBrands.map((brand) => (
+                            <Link
+                                key={brand.id}
+                                href={`/busca?q=${encodeURIComponent(brand.name)}`}
+                                className="px-4 py-2 bg-white border border-industrial-200 rounded-lg text-xs font-bold text-industrial-600 hover:text-industrial-900 hover:border-industrial-400 hover:shadow-sm transition-all uppercase tracking-wider"
+                            >
+                                {brand.name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Empty state */}
             {products.length === 0 && (

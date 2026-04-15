@@ -18,7 +18,7 @@ export default async function Home() {
         products: { some: {} },
         name: { notIn: ["Genérica", "GENÉRICA", "Generica"] }
       },
-      take: 8,
+      take: 20,
       orderBy: { products: { _count: "desc" } }
     }),
     db.product.findMany({
@@ -199,13 +199,9 @@ export default async function Home() {
       {topBrands.length > 0 && (
         <section className="bg-industrial-100/50 border-b border-industrial-200">
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-5 h-px bg-industrial-300 hidden md:block" />
-              <h2 className="text-xs font-extrabold text-industrial-400 uppercase tracking-[0.2em]">
-                Marcas Homologadas MYA
-              </h2>
-              <div className="flex-1 h-px bg-industrial-200 hidden md:block" />
-            </div>
+            <h2 className="text-sm font-extrabold text-industrial-900 uppercase tracking-wider mb-4">
+              Peças para as principais marcas de empilhadeiras do mercado
+            </h2>
             <div className="flex flex-wrap gap-2">
               {topBrands.map((brand) => (
                 <Link
