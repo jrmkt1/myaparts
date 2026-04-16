@@ -15,6 +15,7 @@ const NAV_LINKS = [
     { href: "/busca?q=eletrico", label: "Elétrico" },
     { href: "/busca?q=transmissao", label: "Transmissão" },
     { href: "/busca?q=rolamento", label: "Rolamentos" },
+    { href: "/contato", label: "Contatos" },
 ];
 
 export default function Header() {

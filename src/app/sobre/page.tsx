@@ -135,10 +135,10 @@ export default function SobrePage() {
                                     <li className="flex items-center gap-3">
                                         <Mail size={18} className="text-action shrink-0" />
                                         <a
-                                            href="mailto:myapartsforklift@gmail.com"
+                                            href="mailto:contato@myaparts.com.br"
                                             className="text-industrial-900 font-semibold hover:text-action transition-colors"
                                         >
-                                            myapartsforklift@gmail.com
+                                            contato@myaparts.com.br
                                         </a>
                                     </li>
                                     <li className="flex items-center gap-3">

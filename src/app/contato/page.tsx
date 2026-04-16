@@ -64,7 +64,7 @@ export default function ContatoPage() {
                         </a>
 
                         <a
-                            href="mailto:myapartsforklift@gmail.com"
+                            href="mailto:contato@myaparts.com.br"
                             className="group flex items-center gap-5 p-6 bg-white hover:bg-industrial-50 rounded-2xl border border-industrial-200 hover:border-industrial-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                         >
                             <div className="w-12 h-12 bg-industrial-100 group-hover:bg-industrial-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
@@ -72,7 +72,7 @@ export default function ContatoPage() {
                             </div>
                             <div>
                                 <p className="font-extrabold text-industrial-900 text-lg tracking-tight">E-mail</p>
-                                <p className="text-industrial-500 text-sm font-medium">myapartsforklift@gmail.com</p>
+                                <p className="text-industrial-500 text-sm font-medium">contato@myaparts.com.br</p>
                                 <p className="text-industrial-400 text-xs mt-0.5">Resposta em até 2h úteis</p>
                             </div>
                         </a>
