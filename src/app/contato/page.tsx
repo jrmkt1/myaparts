@@ -50,32 +50,32 @@ export default function ContatoPage() {
                             <p className="text-industrial-500 text-sm">Preencha o formulário abaixo e retornaremos o mais breve possível.</p>
                         </div>
                         
-                        <form className="space-y-5" action="mailto:contato@myaparts.com.br" method="POST" encType="text/plain">
+                        <form className="space-y-5" action="mailto:contato@myaparts.com.br" method="POST" encType="text/plain" autoComplete="off">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-bold text-industrial-700">Nome <span className="text-red-500">*</span></label>
-                                    <input type="text" name="Nome" required placeholder="Seu nome completo" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                    <input type="text" autoComplete="off" name="Nome" required placeholder="Seu nome completo" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-bold text-industrial-700">Telefone / WhatsApp <span className="text-red-500">*</span></label>
-                                    <input type="tel" name="Telefone" required placeholder="(19) 90000-0000" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                    <input type="tel" autoComplete="off" name="Telefone" required placeholder="(19) 90000-0000" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
                                 </div>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-bold text-industrial-700">E-mail <span className="text-red-500">*</span></label>
-                                    <input type="email" name="Email" required placeholder="seu@email.com" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                    <input type="email" autoComplete="off" name="Email" required placeholder="seu@email.com" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-bold text-industrial-700">Empresa (Opcional)</label>
-                                    <input type="text" name="Empresa" placeholder="Nome da empresa" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                    <input type="text" autoComplete="off" name="Empresa" placeholder="Nome da empresa" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
                                 </div>
                             </div>
 
                             <div className="space-y-1.5">
                                 <label className="text-sm font-bold text-industrial-700">Mensagem <span className="text-red-500">*</span></label>
-                                <textarea name="Mensagem" required rows={5} placeholder="Como podemos ajudar? Informe os Part Numbers se possuir." className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400 resize-none"></textarea>
+                                <textarea name="Mensagem" autoComplete="off" required rows={5} placeholder="Como podemos ajudar? Informe os Part Numbers se possuir." className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400 resize-none"></textarea>
                             </div>
 
                             <button type="submit" className="bg-action text-white hover:bg-action-hover px-8 py-3.5 rounded-xl text-sm font-bold shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-action uppercase tracking-widest w-full md:w-auto flex justify-center items-center gap-2">
