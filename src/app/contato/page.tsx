@@ -33,7 +33,7 @@ export default function ContatoPage() {
             </div>
 
             {/* Content */}
-            <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
+            <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
                 <Link
                     href="/"
                     className="inline-flex items-center gap-2 text-sm font-bold text-action hover:text-industrial-900 transition-colors mb-10"
@@ -42,14 +42,56 @@ export default function ContatoPage() {
                     Voltar ao início
                 </Link>
 
-                <div className="space-y-8">
-                    {/* Primary CTAs */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    {/* Left Column: Form */}
+                    <div className="lg:col-span-2 bg-white rounded-2xl border border-industrial-200 p-6 md:p-8 shadow-sm flex flex-col">
+                        <div className="mb-6">
+                            <h2 className="font-extrabold text-industrial-900 text-xl md:text-2xl tracking-tight mb-2">Envie uma mensagem</h2>
+                            <p className="text-industrial-500 text-sm">Preencha o formulário abaixo e retornaremos o mais breve possível.</p>
+                        </div>
+                        
+                        <form className="space-y-5" action="mailto:contato@myaparts.com.br" method="POST" encType="text/plain">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold text-industrial-700">Nome <span className="text-red-500">*</span></label>
+                                    <input type="text" name="Nome" required placeholder="Seu nome completo" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold text-industrial-700">Telefone / WhatsApp <span className="text-red-500">*</span></label>
+                                    <input type="tel" name="Telefone" required placeholder="(19) 90000-0000" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold text-industrial-700">E-mail <span className="text-red-500">*</span></label>
+                                    <input type="email" name="Email" required placeholder="seu@email.com" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold text-industrial-700">Empresa (Opcional)</label>
+                                    <input type="text" name="Empresa" placeholder="Nome da empresa" className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400" />
+                                </div>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-bold text-industrial-700">Mensagem <span className="text-red-500">*</span></label>
+                                <textarea name="Mensagem" required rows={5} placeholder="Como podemos ajudar? Informe os Part Numbers se possuir." className="w-full px-4 py-3 rounded-xl border border-industrial-200 focus:border-action focus:ring-1 focus:ring-action outline-none transition-all placeholder:text-industrial-400 resize-none"></textarea>
+                            </div>
+
+                            <button type="submit" className="bg-action text-white hover:bg-action-hover px-8 py-3.5 rounded-xl text-sm font-bold shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-action uppercase tracking-widest w-full md:w-auto flex justify-center items-center gap-2">
+                                <Mail size={18} />
+                                Enviar Mensagem
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Right Column: Info & CTAs */}
+                    <div className="space-y-4">
                         <a
                             href="https://wa.me/5519971441580"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-5 p-6 bg-[#25D366] hover:bg-[#1ebe5b] rounded-2xl text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+                            className="group flex items-center gap-4 p-5 bg-[#25D366] hover:bg-[#1ebe5b] rounded-2xl text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5"
                         >
                             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                                 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -57,113 +99,83 @@ export default function ContatoPage() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="font-extrabold text-lg tracking-tight">WhatsApp</p>
+                                <p className="font-extrabold text-base tracking-tight">WhatsApp Comercial</p>
                                 <p className="text-green-100 text-sm font-medium">(19) 97144-1580</p>
-                                <p className="text-green-100/70 text-xs mt-0.5">Resposta rápida · Envie o Part Number</p>
                             </div>
                         </a>
 
                         <a
                             href="mailto:contato@myaparts.com.br"
-                            className="group flex items-center gap-5 p-6 bg-white hover:bg-industrial-50 rounded-2xl border border-industrial-200 hover:border-industrial-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                            className="group flex items-center gap-4 p-5 bg-white hover:bg-industrial-50 rounded-2xl border border-industrial-200 hover:border-industrial-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
                         >
                             <div className="w-12 h-12 bg-industrial-100 group-hover:bg-industrial-200 rounded-xl flex items-center justify-center shrink-0 transition-colors">
                                 <Mail size={22} className="text-industrial-700" />
                             </div>
                             <div>
-                                <p className="font-extrabold text-industrial-900 text-lg tracking-tight">E-mail</p>
+                                <p className="font-extrabold text-industrial-900 text-base tracking-tight">E-mail Direto</p>
                                 <p className="text-industrial-500 text-sm font-medium">contato@myaparts.com.br</p>
-                                <p className="text-industrial-400 text-xs mt-0.5">Resposta em até 2h úteis</p>
                             </div>
                         </a>
-                    </div>
 
-                    {/* Info cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Horário */}
-                        <div className="bg-white rounded-2xl border border-industrial-200 p-6 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-9 h-9 bg-industrial-100 rounded-lg flex items-center justify-center">
-                                    <Clock size={18} className="text-industrial-700" />
-                                </div>
-                                <h2 className="font-extrabold text-industrial-900 text-sm uppercase tracking-widest">Horário</h2>
+                        <div className="bg-white rounded-2xl border border-industrial-200 p-5 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                                <Clock size={16} className="text-industrial-400" />
+                                <h3 className="font-extrabold text-industrial-900 text-xs uppercase tracking-widest">Horário de Atendimento</h3>
                             </div>
-                            <dl className="space-y-2 text-sm">
+                            <div className="space-y-1.5 text-sm">
                                 <div className="flex justify-between">
-                                    <dt className="text-industrial-500 font-medium">Seg – Sex</dt>
-                                    <dd className="text-industrial-900 font-bold">08h – 18h</dd>
+                                    <span className="text-industrial-500 font-medium">Segunda a Sexta</span>
+                                    <span className="text-industrial-900 font-bold">08h – 18h</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <dt className="text-industrial-500 font-medium">Sábado</dt>
-                                    <dd className="text-industrial-900 font-bold">08h – 12h</dd>
+                                    <span className="text-industrial-500 font-medium">Sábado</span>
+                                    <span className="text-industrial-900 font-bold">08h – 12h</span>
                                 </div>
-                            </dl>
-                        </div>
-
-                        {/* Telefone */}
-                        <div className="bg-white rounded-2xl border border-industrial-200 p-6 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-9 h-9 bg-industrial-100 rounded-lg flex items-center justify-center">
-                                    <Phone size={18} className="text-industrial-700" />
-                                </div>
-                                <h2 className="font-extrabold text-industrial-900 text-sm uppercase tracking-widest">Telefone</h2>
                             </div>
-                            <a
-                                href="https://wa.me/5519971441580"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-industrial-900 font-extrabold text-xl hover:text-action transition-colors"
-                            >
-                                (19) 97144-1580
-                            </a>
-                            <p className="text-industrial-400 text-xs mt-1">WhatsApp disponível</p>
                         </div>
 
-                        {/* Endereço */}
-                        <div className="bg-white rounded-2xl border border-industrial-200 p-6 shadow-sm">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-9 h-9 bg-industrial-100 rounded-lg flex items-center justify-center">
-                                    <MapPin size={18} className="text-industrial-700" />
-                                </div>
-                                <h2 className="font-extrabold text-industrial-900 text-sm uppercase tracking-widest">Endereço</h2>
+                        <div className="bg-white rounded-2xl border border-industrial-200 p-5 shadow-sm">
+                            <div className="flex items-center gap-3 mb-3">
+                                <MapPin size={16} className="text-industrial-400" />
+                                <h3 className="font-extrabold text-industrial-900 text-xs uppercase tracking-widest">Localização</h3>
                             </div>
                             <address className="not-italic text-sm text-industrial-700 font-medium leading-relaxed">
                                 Rua Eduardo Cesar Rocha, 276<br />
                                 Parque Santa Candida<br />
                                 Araras – SP<br />
-                                <span className="font-mono text-industrial-500">CEP 13603-181</span>
+                                CEP 13603-181
                             </address>
                         </div>
                     </div>
-
-                    {/* Dados Fiscais */}
-                    <section className="bg-white rounded-2xl border border-industrial-200 p-6 md:p-8 shadow-sm">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-9 h-9 bg-industrial-100 rounded-lg flex items-center justify-center">
-                                <Building2 size={18} className="text-industrial-700" />
-                            </div>
-                            <h2 className="font-extrabold text-industrial-900 text-sm uppercase tracking-widest">Dados Fiscais para Emissão de NF</h2>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div>
-                                <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Razão Social</dt>
-                                <dd className="text-industrial-900 font-semibold text-sm">Mya Parts Material Handling Ltda</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">CNPJ</dt>
-                                <dd className="text-industrial-900 font-semibold font-mono text-sm">62.401.620/0001-90</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Inscrição Estadual</dt>
-                                <dd className="text-industrial-900 font-semibold font-mono text-sm">182348309114</dd>
-                            </div>
-                            <div>
-                                <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Data de Abertura</dt>
-                                <dd className="text-industrial-900 font-semibold text-sm">Agosto de 2025</dd>
-                            </div>
-                        </div>
-                    </section>
                 </div>
+
+                {/* Dados Fiscais */}
+                <section className="bg-white rounded-2xl border border-industrial-200 p-6 md:p-8 shadow-sm">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-9 h-9 bg-industrial-100 rounded-lg flex items-center justify-center">
+                            <Building2 size={18} className="text-industrial-700" />
+                        </div>
+                        <h2 className="font-extrabold text-industrial-900 text-sm uppercase tracking-widest">Dados Fiscais para Emissão de NF</h2>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Razão Social</dt>
+                            <dd className="text-industrial-900 font-semibold text-sm">Mya Parts Material Handling Ltda</dd>
+                        </div>
+                        <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">CNPJ</dt>
+                            <dd className="text-industrial-900 font-semibold font-mono text-sm">62.401.620/0001-90</dd>
+                        </div>
+                        <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Inscrição Estadual</dt>
+                            <dd className="text-industrial-900 font-semibold font-mono text-sm">182348309114</dd>
+                        </div>
+                        <div>
+                            <dt className="text-xs font-bold uppercase tracking-widest text-industrial-400 mb-1">Data de Abertura</dt>
+                            <dd className="text-industrial-900 font-semibold text-sm">Agosto de 2025</dd>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );
