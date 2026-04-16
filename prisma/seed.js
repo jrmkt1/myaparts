@@ -9,7 +9,7 @@ async function main() {
 
     // 1. Criar o Administrador Padrão
     const adminEmail = "admin@myaparts.com.br";
-    const passwordHash = await bcrypt.hash("123456", 10);
+    const passwordHash = await bcrypt.hash("MYA@Adm1n#2026!", 10);
 
     const admin = await prisma.user.upsert({
         where: { email: adminEmail },
@@ -118,7 +118,7 @@ async function main() {
     }
     console.log("Produtos de Demonstração INSERIDOS com Sucesso!");
 
-    console.log("Seed completado com sucesso! Você pode logar no painel com admin@myaparts.com.br / 123456");
+    console.log("Seed completado com sucesso! Você pode logar no painel com admin@myaparts.com.br / MYA@Adm1n#2026!");
 }
 
 main()

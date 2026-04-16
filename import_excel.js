@@ -139,7 +139,7 @@ async function main() {
                         part_number: String(partNumber).trim(),
                         clean_part_number: cleanPartNumber,
                         part_number_sec: cleanSec && cleanSec !== cleanPartNumber ? String(partNumberSec).trim() : null,
-                        description: `Importado de planilha Excel.`,
+                        description: null,
                         brandId: targetBrandId,
                         categoryId: targetCategoryId
                     }
