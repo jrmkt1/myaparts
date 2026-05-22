@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { cleanPartNumber } from "@/lib/utils/search";
 import ProductCard from "@/components/catalog/ProductCard";
 import { SearchX } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+    title: "Busca de Peças | MYA Parts",
+    description: "Busque peças para empilhadeiras por nome, código OEM ou marca no catálogo MYA Parts.",
+    robots: {
+        index: false,
+        follow: true,
+    },
+};
 
 export default async function BuscaPage({
     searchParams,

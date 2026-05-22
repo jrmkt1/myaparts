@@ -34,7 +34,8 @@ except:
 SKIP_DIRS = {
     'node_modules', '.next', 'dist', 'build', '.git', '.github',
     '__pycache__', '.vscode', '.idea', 'coverage', 'test', 'tests',
-    '__tests__', 'spec', 'docs', 'documentation', 'examples'
+    '__tests__', 'spec', 'docs', 'documentation', 'examples',
+    'painel', '(admin)'
 }
 
 # Files to skip (not pages)
@@ -93,32 +94,59 @@ def find_pages(project_path: Path) -> list:
     return files[:50]  # Limit to 50 files
 
 
-def check_page(file_path: Path) -> dict:
+def check_page(file_path: Path, project_path: Path) -> dict:
     """Check a single page for SEO issues."""
     issues = []
     
     try:
+        rel_path = str(file_path.relative_to(project_path))
+    except Exception:
+        rel_path = file_path.name
+        
+    try:
         content = file_path.read_text(encoding='utf-8', errors='ignore')
     except Exception as e:
-        return {"file": str(file_path.name), "issues": [f"Error: {e}"]}
+        return {"file": rel_path, "issues": [f"Error: {e}"]}
     
-    # Detect if this is a layout/template file (has Head component)
-    is_layout = 'Head>' in content or '<head' in content.lower()
+    # Detect if this is a root layout or a main HTML page shell
+    # Checking for html/body tags prevents checking nested React layouts that don't render document shells.
+    is_layout = (
+        'Head>' in content or 
+        re.search(r'<head\b', content, re.I) is not None or 
+        '<html' in content.lower() or 
+        '<body' in content.lower()
+    )
     
-    # 1. Title tag
-    has_title = '<title' in content.lower() or 'title=' in content or 'Head>' in content
+    # 1. Title tag or metadata title definition
+    has_title = (
+        '<title' in content.lower() or 
+        'title=' in content or 
+        'Head>' in content or 
+        'title:' in content or
+        'generateMetadata' in content
+    )
     if not has_title and is_layout:
-        issues.append("Missing <title> tag")
+        issues.append("Missing <title> tag or metadata title definition")
     
-    # 2. Meta description
-    has_description = 'name="description"' in content.lower() or 'name=\'description\'' in content.lower()
+    # 2. Meta description or metadata description definition
+    has_description = (
+        'name="description"' in content.lower() or 
+        'name=\'description\'' in content.lower() or 
+        'description:' in content or
+        'generateMetadata' in content
+    )
     if not has_description and is_layout:
-        issues.append("Missing meta description")
+        issues.append("Missing meta description or metadata description definition")
     
-    # 3. Open Graph tags
-    has_og = 'og:' in content or 'property="og:' in content.lower()
+    # 3. Open Graph tags or metadata openGraph definition
+    has_og = (
+        'og:' in content or 
+        'property="og:' in content.lower() or 
+        'openGraph:' in content or
+        'generateMetadata' in content
+    )
     if not has_og and is_layout:
-        issues.append("Missing Open Graph tags")
+        issues.append("Missing Open Graph tags or metadata openGraph definition")
     
     # 4. Heading hierarchy - multiple H1s
     h1_matches = re.findall(r'<h1[^>]*>', content, re.I)
@@ -140,7 +168,7 @@ def check_page(file_path: Path) -> dict:
     # has_canonical = 'rel="canonical"' in content.lower()
     
     return {
-        "file": str(file_path.name),
+        "file": rel_path,
         "issues": issues
     }
 
@@ -170,7 +198,7 @@ def main():
     # Check each page
     all_issues = []
     for f in pages:
-        result = check_page(f)
+        result = check_page(f, project_path)
         if result["issues"]:
             all_issues.append(result)
     

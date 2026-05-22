@@ -32,8 +32,54 @@ export default async function Home() {
     })
   ]);
 
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "MYA Parts",
+    "legalName": "Mya Parts Material Handling Ltda",
+    "url": "https://myaparts.com.br",
+    "logo": "https://myaparts.com.br/mya-logo.png",
+    "cnpj": "62.401.620/0001-90",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Rua Eduardo Cesar Rocha, 276",
+      "addressLocality": "Araras",
+      "addressRegion": "SP",
+      "postalCode": "13603-181",
+      "addressCountry": "BR"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+55-19-97144-1580",
+      "contactType": "sales",
+      "email": "contato@myaparts.com.br",
+      "areaServed": "BR",
+      "availableLanguage": "Portuguese"
+    }
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MYA Parts",
+    "url": "https://myaparts.com.br",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://myaparts.com.br/busca?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
 
       {/* ─── HERO ─── */}
       <section

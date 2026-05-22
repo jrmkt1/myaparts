@@ -22,9 +22,9 @@ export default function OrcamentoClient() {
                 <div className="bg-industrial-100 p-8 rounded-full mb-6 text-industrial-300">
                     <ShoppingCart size={64} />
                 </div>
-                <h1 className="text-3xl font-extrabold text-industrial-900 tracking-tight text-center mb-4">
+                <h2 className="text-3xl font-extrabold text-industrial-900 tracking-tight text-center mb-4">
                     Seu Orçamento está vazio
-                </h1>
+                </h2>
                 <p className="text-industrial-400 mb-8 text-center max-w-md">
                     Você ainda não adicionou nenhuma peça para cotação. Acesse nosso catálogo ou use a busca para encontrar o que precisa.
                 </p>

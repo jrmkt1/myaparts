@@ -5,6 +5,9 @@ import { ArrowLeft, Building2, Target, History, Settings, MapPin, Phone, Mail, F
 export const metadata: Metadata = {
     title: "Sobre Nós | MYA Parts",
     description: "Conheça a história e a missão da MYA Parts, especialistas em reposição de peças para maquinário industrial e empilhadeiras.",
+    alternates: {
+        canonical: "/sobre",
+    },
 };
 
 export default function SobrePage() {

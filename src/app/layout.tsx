@@ -15,8 +15,39 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MYA PARTS | Peças para Empilhadeiras",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br"),
+  title: {
+    default: "MYA PARTS | Peças para Empilhadeiras",
+    template: "%s | MYA PARTS"
+  },
   description: "Catálogo completo de peças para empilhadeiras. Motor, Freio, Hidráulico e mais para Toyota, Hyster, Yale.",
+  alternates: {
+    canonical: "./",
+  },
+  openGraph: {
+    title: "MYA PARTS | Peças para Empilhadeiras",
+    description: "Catálogo completo de peças para empilhadeiras. Motor, Freio, Hidráulico e mais para Toyota, Hyster, Yale.",
+    url: "./",
+    siteName: "MYA PARTS",
+    locale: "pt_BR",
+    type: "website",
+    images: [
+      {
+        url: "/mya-logo.png",
+        width: 400,
+        height: 160,
+        alt: "MYA PARTS Logo",
+      }
+    ]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    }
+  }
 };
 
 export default async function RootLayout({

@@ -6,6 +6,9 @@ import ContatoForm from "@/components/forms/ContatoForm";
 export const metadata: Metadata = {
     title: "Contato | MYA Parts",
     description: "Entre em contato com a MYA Parts. Atendimento comercial por WhatsApp, e-mail e telefone. Araras/SP.",
+    alternates: {
+        canonical: "/contato",
+    },
 };
 
 export default function ContatoPage() {

@@ -21,6 +21,10 @@ Priority Order:
 """
 
 import sys
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except:
+    pass
 import subprocess
 import argparse
 from pathlib import Path

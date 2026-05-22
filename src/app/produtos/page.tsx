@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Package } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+    title: "Todos os Produtos | MYA Parts",
+    description: "Navegue pelo catálogo completo de peças para empilhadeiras. Milhares de códigos OEM de diversas marcas prontas para cotação.",
+    alternates: {
+        canonical: "/produtos",
+    },
+};
 
 export default async function TodosProdutosPage() {
     const [products, topBrands] = await Promise.all([

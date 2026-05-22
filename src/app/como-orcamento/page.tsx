@@ -5,6 +5,9 @@ import { ArrowLeft, Search, PlusCircle, ShoppingCart, Send, ClipboardCheck } fro
 export const metadata: Metadata = {
     title: "Como enviar orçamento? | MYA Parts",
     description: "Aprenda a realizar cotações e orçamentos na MYA Parts de forma rápida e segura para sua indústria.",
+    alternates: {
+        canonical: "/como-orcamento",
+    },
 };
 
 const steps = [

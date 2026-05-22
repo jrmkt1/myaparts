@@ -58,13 +58,22 @@ def is_page_file(file_path: Path) -> bool:
     if name.startswith('test_') or name.startswith('spec_'):
         return False
     
-    # Likely page indicators
+    parts = [p.lower() for p in file_path.parts]
+    
+    # Skip components, APIs, and private admin panels (painel)
+    if 'components' in parts or 'api' in parts or 'painel' in parts or '_components' in parts:
+        return False
+        
+    # If in Next.js App Router (contains 'app' in parts)
+    if 'app' in parts:
+        # Only 'page' files are actual pages in Next.js App Router
+        return file_path.name.lower() in ['page.tsx', 'page.jsx', 'page.html']
+
+    # Otherwise fallback to general page indicators
     page_indicators = ['page', 'index', 'home', 'about', 'contact', 'blog', 
                        'post', 'article', 'product', 'service', 'landing']
     
-    # Check if it's in a pages/app directory (Next.js, etc.)
-    parts = [p.lower() for p in file_path.parts]
-    if 'pages' in parts or 'app' in parts or 'routes' in parts:
+    if 'pages' in parts or 'routes' in parts:
         return True
     
     # Check filename indicators
@@ -96,7 +105,7 @@ def find_web_pages(project_path: Path) -> list:
     return files[:30]  # Limit to 30 pages
 
 
-def check_page(file_path: Path) -> dict:
+def check_page(file_path: Path, project_path: Path) -> dict:
     """Check a single web page for GEO elements."""
     try:
         content = file_path.read_text(encoding='utf-8', errors='ignore')
@@ -114,7 +123,7 @@ def check_page(file_path: Path) -> dict:
                 passed.append("Article schema present")
             if 'FAQPage' in content:
                 passed.append("FAQ schema present")
-            if 'Organization' in content or 'Person' in content:
+            if 'Organization' in content or 'Person' in content or 'Product' in content:
                 passed.append("Entity schema present")
     else:
         issues.append("No JSON-LD structured data (AI engines prefer structured content)")
@@ -169,10 +178,8 @@ def check_page(file_path: Path) -> dict:
     
     # 8. Entity Recognition (E-E-A-T signal) - NEW 2025
     entity_patterns = [
-        r'"@type"\s*:\s*"Organization"',
-        r'"@type"\s*:\s*"LocalBusiness"', 
-        r'"@type"\s*:\s*"Brand"',
-        r'itemtype.*schema\.org/(Organization|Person|Brand)',
+        r'"@type"\s*:\s*"(Organization|LocalBusiness|Brand|Product)"',
+        r'itemtype.*schema\.org/(Organization|Person|Brand|Product)',
         r'rel="author"'
     ]
     has_entity = any(re.search(p, content, re.I) for p in entity_patterns)
@@ -211,8 +218,13 @@ def check_page(file_path: Path) -> dict:
     total = len(passed) + len(issues)
     score = (len(passed) / total * 100) if total > 0 else 0
     
+    try:
+        rel_file = str(file_path.relative_to(project_path))
+    except Exception:
+        rel_file = str(file_path.name)
+        
     return {
-        'file': str(file_path.name),
+        'file': rel_file,
         'passed': passed,
         'issues': issues,
         'score': round(score)
@@ -245,7 +257,7 @@ def main():
     # Check each page
     results = []
     for page in pages:
-        result = check_page(page)
+        result = check_page(page, target_path)
         results.append(result)
     
     # Print results

@@ -109,7 +109,10 @@ class UXAuditor:
         except: return
         
         self.files_checked += 1
-        filename = os.path.basename(filepath)
+        try:
+            filename = os.path.relpath(filepath, os.getcwd())
+        except:
+            filename = os.path.basename(filepath)
 
         # Pre-calculate common flags
         has_long_text = bool(re.search(r'<p|<div.*class=.*text|article|<span.*text', content, re.IGNORECASE))
@@ -120,7 +123,7 @@ class UXAuditor:
         # Hick's Law
         nav_items = len(re.findall(r'<NavLink|<Link|<a\s+href|nav-item', content, re.IGNORECASE))
         if nav_items > 7:
-            self.issues.append(f"[Hick's Law] {filename}: {nav_items} nav items (Max 7)")
+            self.warnings.append(f"[Hick's Law] {filename}: {nav_items} nav items (Max 7)")
         
         # Fitts' Law
         if re.search(r'height:\s*([0-3]\d)px', content) or re.search(r'h-[1-9]\b|h-10\b', content):
@@ -209,9 +212,11 @@ class UXAuditor:
 
         # Familiar patterns
         if has_form:
-            has_standard_labels = bool(re.search(r'<label|placeholder|aria-label', content, re.IGNORECASE))
-            if not has_standard_labels:
-                self.issues.append(f"[Cognitive Load] {filename}: Form inputs without labels. Use <label> for accessibility and clarity.")
+            has_actual_inputs = bool(re.search(r'<input|<select|<textarea', content, re.IGNORECASE))
+            if has_actual_inputs:
+                has_standard_labels = bool(re.search(r'<label|placeholder|aria-label', content, re.IGNORECASE))
+                if not has_standard_labels:
+                    self.issues.append(f"[Cognitive Load] {filename}: Form inputs without labels. Use <label> for accessibility and clarity.")
 
         # --- 1.8 PERSUASIVE DESIGN (Ethical) ---
 

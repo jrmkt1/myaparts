@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { db } from "@/lib/db";
 import { ArrowLeft, CheckCircle2, Package, Info, Tag, Hash } from "lucide-react";
 import Link from "next/link";
@@ -5,6 +6,44 @@ import { notFound } from "next/navigation";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+
+    const product = await db.product.findUnique({
+        where: { id },
+        include: {
+            brand: true,
+            category: true,
+            media: { where: { isMain: true }, take: 1 }
+        }
+    });
+
+    if (!product) {
+        return {
+            title: "Peça Não Encontrada | MYA Parts"
+        };
+    }
+
+    const title = `${product.name} - PN: ${product.part_number} | MYA Parts`;
+    const description = `Peça de empilhadeira ${product.name} (Part Number OEM: ${product.part_number}) da marca ${product.brand.name}. Envie sua cotação na MYA Parts.`;
+    const mainMedia = product.media[0];
+    const images = mainMedia ? [{ url: mainMedia.url, alt: product.name }] : [];
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: `/produto/${id}`
+        },
+        openGraph: {
+            title,
+            description,
+            type: "website",
+            images,
+        }
+    };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -22,8 +61,34 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
     const mainMedia = product.media.find((m) => m.isMain) || product.media[0];
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "image": mainMedia?.url,
+        "description": product.description || `Peça de empilhadeira ${product.name} da marca ${product.brand.name} com Part Number ${product.part_number}.`,
+        "sku": product.part_number,
+        "mpn": product.part_number,
+        "brand": {
+            "@type": "Brand",
+            "name": product.brand.name
+        },
+        "category": product.category.name,
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "BRL",
+            "availability": "https://schema.org/InStock",
+            "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br"}/produto/${product.id}`
+        }
+    };
+
     return (
         <div className="min-h-[70vh] font-sans">
+            {/* JSON-LD Schema Markup */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
 
                 {/* Breadcrumb */}

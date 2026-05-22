@@ -5,6 +5,9 @@ import { Shield, ArrowLeft } from "lucide-react";
 export const metadata: Metadata = {
     title: "Política de Privacidade | MYA Parts",
     description: "Conheça nossa Política de Privacidade e como protegemos seus dados pessoais em conformidade com a LGPD (Lei nº 13.709/2018).",
+    alternates: {
+        canonical: "/politica-de-privacidade",
+    },
 };
 
 const sections = [

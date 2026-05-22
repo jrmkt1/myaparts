@@ -5,6 +5,9 @@ import { Cookie, ArrowLeft } from "lucide-react";
 export const metadata: Metadata = {
     title: "Política de Cookies | MYA Parts",
     description: "Saiba como o site MYA Parts utiliza cookies, para que servem e como você pode gerenciá-los conforme a LGPD.",
+    alternates: {
+        canonical: "/politica-de-cookies",
+    },
 };
 
 const cookieTable = [
