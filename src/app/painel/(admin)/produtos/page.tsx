@@ -4,19 +4,33 @@ import { Plus, Edit, Image as ImageIcon, Search, Download } from "lucide-react";
 import MassImportButton from "@/components/admin/MassImportButton";
 import DeleteProductButton from "@/components/admin/DeleteProductButton";
 
-export default async function ProdutosPage(props: { searchParams: Promise<{ q?: string }> }) {
+export default async function ProdutosPage(props: { searchParams: Promise<{ q?: string; categoryId?: string }> }) {
     const searchParams = await props.searchParams;
     const q = searchParams?.q || "";
+    const categoryId = searchParams?.categoryId || "";
+
+    // Fetch categories for the filter dropdown
+    const categories = await db.category.findMany({
+        orderBy: { name: "asc" }
+    });
+
+    const whereClause: any = {};
+
+    if (q) {
+        whereClause.OR = [
+            { name: { contains: q } },
+            { part_number: { contains: q } },
+            { clean_part_number: { contains: q.replace(/[-.\s+_]/g, "").toUpperCase() } },
+        ];
+    }
+
+    if (categoryId) {
+        whereClause.categoryId = categoryId;
+    }
 
     // Fetch products, with optional filtering
     const products = await db.product.findMany({
-        where: q ? {
-            OR: [
-                { name: { contains: q } },
-                { part_number: { contains: q } },
-                { clean_part_number: { contains: q.replace(/[-.\s+_]/g, "").toUpperCase() } },
-            ]
-        } : undefined,
+        where: whereClause,
         include: {
             category: true,
             brand: true,
@@ -57,8 +71,8 @@ export default async function ProdutosPage(props: { searchParams: Promise<{ q?: 
                 </div>
             </div>
 
-            {/* FIlter and Search Bar */}
-            <form method="GET" action="/painel/produtos" className="bg-white rounded-xl shadow-sm border border-industrial-200 p-4 flex gap-3">
+            {/* Filter and Search Bar */}
+            <form method="GET" action="/painel/produtos" className="bg-white rounded-xl shadow-sm border border-industrial-200 p-4 flex flex-col md:flex-row gap-3">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-industrial-400" size={18} />
                     <input
@@ -69,14 +83,30 @@ export default async function ProdutosPage(props: { searchParams: Promise<{ q?: 
                         className="w-full pl-10 pr-4 py-2 border border-industrial-200 rounded-md focus:outline-none focus:ring-2 focus:ring-action focus:border-action transition-all"
                     />
                 </div>
-                <button type="submit" className="bg-industrial-900 hover:bg-black text-white px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm">
-                    Buscar
-                </button>
-                {q && (
-                    <Link href="/painel/produtos" className="bg-industrial-100 hover:bg-industrial-200 text-industrial-800 px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm flex items-center justify-center">
-                        Limpar
-                    </Link>
-                )}
+
+                <select
+                    name="categoryId"
+                    defaultValue={categoryId}
+                    className="px-4 py-2 border border-industrial-200 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-action focus:border-action transition-all text-sm font-semibold text-industrial-800"
+                >
+                    <option value="">Todas as Categorias</option>
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
+
+                <div className="flex gap-2">
+                    <button type="submit" className="flex-1 md:flex-none bg-industrial-900 hover:bg-black text-white px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm">
+                        Filtrar
+                    </button>
+                    {(q || categoryId) && (
+                        <Link href="/painel/produtos" className="flex-1 md:flex-none bg-industrial-100 hover:bg-industrial-200 text-industrial-800 px-6 py-2 rounded-md font-bold transition-all uppercase tracking-widest text-sm flex items-center justify-center">
+                            Limpar
+                        </Link>
+                    )}
+                </div>
             </form>
 
             <div className="bg-white rounded-xl shadow-sm border border-industrial-200 overflow-hidden">

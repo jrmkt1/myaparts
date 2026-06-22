@@ -57,15 +57,23 @@ export default async function CategoriasPage({ searchParams }: PageProps) {
                             categories.map((cat) => (
                                 <tr key={cat.id} className="hover:bg-industrial-50 transition-colors">
                                     <td className="px-6 py-4 font-bold text-industrial-900">
-                                        {cat.name}
+                                        <Link
+                                            href={`/painel/produtos?categoryId=${cat.id}`}
+                                            className="hover:text-action hover:underline transition-colors"
+                                            title="Ver produtos desta categoria"
+                                        >
+                                            {cat.name}
+                                        </Link>
                                     </td>
                                     <td className="px-6 py-4 font-mono text-xs text-industrial-400">
                                         /{cat.slug}
                                     </td>
                                     <td className="px-6 py-4 text-center">
-                                        <span className="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-full text-xs font-bold bg-industrial-200 text-industrial-800">
-                                            {cat._count.products}
-                                        </span>
+                                        <Link href={`/painel/produtos?categoryId=${cat.id}`} title="Ver produtos desta categoria">
+                                            <span className="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-full text-xs font-bold bg-industrial-200 text-industrial-800 hover:bg-action hover:text-white transition-colors cursor-pointer">
+                                                {cat._count.products}
+                                            </span>
+                                        </Link>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-4">
