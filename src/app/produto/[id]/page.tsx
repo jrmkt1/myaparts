@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { db } from "@/lib/db";
-import { ArrowLeft, CheckCircle2, Package, Info, Tag, Hash } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Package, Tag, Hash } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AddToCartButton from "@/components/cart/AddToCartButton";
@@ -202,7 +202,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                 {[
                                     "Garantia de Qualidade MYA",
                                     `Compatibilidade Verificada (${product.brand.name})`,
-                                    "Faturamento para CNPJ disponível",
                                 ].map((benefit) => (
                                     <li key={benefit} className="flex items-center gap-2.5 text-sm font-semibold text-industrial-700">
                                         <CheckCircle2 className="text-action shrink-0" size={16} />
@@ -235,10 +234,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                     Comprar pelo WhatsApp
                                 </a>
 
-                                <p className="text-xs text-industrial-400 flex items-center gap-1.5 font-medium">
-                                    <Info size={12} />
-                                    Faturamentos mensais para CNPJ disponíveis.
-                                </p>
                             </div>
                         </div>
                     </div>
