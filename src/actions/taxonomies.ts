@@ -77,3 +77,79 @@ export async function createBrandAction(prevState: unknown, formData: FormData) 
         return { error: "Erro interno ao criar marca." };
     }
 }
+
+export async function updateCategoryAction(prevState: unknown, formData: FormData) {
+    try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
+        const id = formData.get("id") as string;
+        const name = formData.get("name") as string;
+
+        if (!id) {
+            return { error: "ID da categoria não fornecido." };
+        }
+        if (!name || name.trim() === "") {
+            return { error: "O nome da categoria é obrigatório." };
+        }
+
+        const slug = name
+            .toLowerCase()
+            .trim()
+            .replace(/[\s_]+/g, "-")
+            .replace(/[^\w-]+/g, "");
+
+        const existing = await db.category.findFirst({
+            where: {
+                slug,
+                NOT: { id }
+            }
+        });
+        if (existing) {
+            return { error: "Uma categoria com este nome ou slug já existe." };
+        }
+
+        await db.category.update({
+            where: { id },
+            data: { name, slug },
+        });
+
+        revalidatePath("/painel/categorias");
+        revalidatePath("/painel/produtos/novo");
+        return { success: true };
+    } catch (error) {
+        console.error("[UPDATE_CATEGORY_ERROR]", error);
+        return { error: "Erro interno ao atualizar categoria." };
+    }
+}
+
+export async function deleteCategoryAction(id: string) {
+    try {
+        const session = await auth();
+        if (!session || session.user.role !== "ADMIN") {
+            return { error: "Não autorizado." };
+        }
+
+        const productsCount = await db.product.count({
+            where: { categoryId: id }
+        });
+
+        if (productsCount > 0) {
+            return { error: "Não é possível excluir uma categoria que possui itens vinculados." };
+        }
+
+        await db.category.delete({
+            where: { id }
+        });
+
+        revalidatePath("/painel/categorias");
+        revalidatePath("/painel/produtos/novo");
+        return { success: true };
+    } catch (error) {
+        console.error("[DELETE_CATEGORY_ERROR]", error);
+        return { error: "Erro interno ao excluir categoria." };
+    }
+}
+

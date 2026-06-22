@@ -1,8 +1,16 @@
 import { db } from "@/lib/db";
-import { Layers, Tag } from "lucide-react";
+import { Edit2, Layers } from "lucide-react";
 import CategoryForm from "@/components/admin/CategoryForm";
+import DeleteCategoryButton from "@/components/admin/DeleteCategoryButton";
+import Link from "next/link";
 
-export default async function CategoriasPage() {
+interface PageProps {
+    searchParams: Promise<{ edit?: string }>;
+}
+
+export default async function CategoriasPage({ searchParams }: PageProps) {
+    const { edit } = await searchParams;
+
     const categories = await db.category.findMany({
         orderBy: { name: "asc" },
         include: {
@@ -11,6 +19,8 @@ export default async function CategoriasPage() {
             }
         }
     });
+
+    const categoryToEdit = edit ? categories.find((cat) => cat.id === edit) : undefined;
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
@@ -24,7 +34,7 @@ export default async function CategoriasPage() {
                 </p>
             </div>
 
-            <CategoryForm />
+            <CategoryForm categoryToEdit={categoryToEdit} />
 
             <div className="bg-white rounded-xl shadow-sm border border-industrial-200 overflow-hidden">
                 <table className="w-full text-left text-sm text-industrial-800">
@@ -33,12 +43,13 @@ export default async function CategoriasPage() {
                             <th scope="col" className="px-6 py-4">Nome da Categoria</th>
                             <th scope="col" className="px-6 py-4">Slug URL</th>
                             <th scope="col" className="px-6 py-4 text-center">Itens Vinculados</th>
+                            <th scope="col" className="px-6 py-4 text-right">Ações</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-industrial-200">
                         {categories.length === 0 ? (
                             <tr>
-                                <td colSpan={3} className="px-6 py-12 text-center text-industrial-400 font-medium opacity-80 border-dashed border-2 border-industrial-200 m-4 rounded-lg">
+                                <td colSpan={4} className="px-6 py-12 text-center text-industrial-400 font-medium opacity-80 border-dashed border-2 border-industrial-200 m-4 rounded-lg">
                                     Nenhuma categoria cadastrada ainda no seu sistema.<br />
                                 </td>
                             </tr>
@@ -56,6 +67,18 @@ export default async function CategoriasPage() {
                                             {cat._count.products}
                                         </span>
                                     </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-4">
+                                            <Link
+                                                href={`/painel/categorias?edit=${cat.id}`}
+                                                className="text-industrial-400 hover:text-industrial-900 transition-colors"
+                                                title="Editar"
+                                            >
+                                                <Edit2 size={18} />
+                                            </Link>
+                                            <DeleteCategoryButton categoryId={cat.id} />
+                                        </div>
+                                    </td>
                                 </tr>
                             ))
                         )}
@@ -65,3 +88,4 @@ export default async function CategoriasPage() {
         </div>
     );
 }
+
