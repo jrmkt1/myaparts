@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         };
     }
 
-    const title = `${product.name} - PN: ${product.part_number} | MYA Parts`;
-    const description = `Peça de empilhadeira ${product.name} (Part Number OEM: ${product.part_number}) da marca ${product.brand.name}. Envie sua cotação na MYA Parts.`;
+    const title = `${product.name} - PN: ${product.part_number}${product.part_number_sec ? ` / ${product.part_number_sec}` : ""} | MYA Parts`;
+    const description = `Peça de empilhadeira ${product.name} (Part Number OEM: ${product.part_number}${product.part_number_sec ? `, Cód. Secundário: ${product.part_number_sec}` : ""}) da marca ${product.brand.name}. Envie sua cotação na MYA Parts.`;
     
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
     const mainMedia = product.media[0];
@@ -38,9 +38,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         
     const images = [{ url: imageUrl, alt: product.name }];
 
+    const keywords = [
+        product.name,
+        product.part_number,
+        product.brand.name,
+        product.category.name,
+        "peças para empilhadeiras",
+        "mya parts"
+    ];
+    if (product.part_number_sec) {
+        keywords.push(product.part_number_sec);
+    }
+
     return {
         title,
         description,
+        keywords,
         alternates: {
             canonical: `/produto/${id}`
         },
