@@ -27,8 +27,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     const title = `${product.name} - PN: ${product.part_number} | MYA Parts`;
     const description = `Peça de empilhadeira ${product.name} (Part Number OEM: ${product.part_number}) da marca ${product.brand.name}. Envie sua cotação na MYA Parts.`;
+    
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
     const mainMedia = product.media[0];
-    const images = mainMedia ? [{ url: mainMedia.url, alt: product.name }] : [];
+    const imageUrl = mainMedia?.url 
+        ? (mainMedia.url.startsWith("http") 
+            ? mainMedia.url 
+            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
+        : `${baseUrl}/mya-logo.png`;
+        
+    const images = [{ url: imageUrl, alt: product.name }];
 
     return {
         title,
@@ -61,11 +69,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
     const mainMedia = product.media.find((m) => m.isMain) || product.media[0];
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
+    const absoluteImageUrl = mainMedia?.url 
+        ? (mainMedia.url.startsWith("http") 
+            ? mainMedia.url 
+            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
+        : `${baseUrl}/mya-logo.png`;
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Product",
         "name": product.name,
-        "image": mainMedia?.url,
+        "image": absoluteImageUrl,
         "description": product.description || `Peça de empilhadeira ${product.name} da marca ${product.brand.name} com Part Number ${product.part_number}.`,
         "sku": product.part_number,
         "mpn": product.part_number,
@@ -76,9 +91,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         "category": product.category.name,
         "offers": {
             "@type": "Offer",
+            "price": product.price ? product.price.toString() : "0.00",
             "priceCurrency": "BRL",
             "availability": "https://schema.org/InStock",
-            "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br"}/produto/${product.id}`
+            "url": `${baseUrl}/produto/${product.id}`
         }
     };
 

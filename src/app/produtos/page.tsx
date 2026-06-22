@@ -12,6 +12,19 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "/produtos",
     },
+    openGraph: {
+        title: "Todos os Produtos | MYA Parts",
+        description: "Navegue pelo catálogo completo de peças para empilhadeiras. Milhares de códigos OEM de diversas marcas prontas para cotação.",
+        type: "website",
+        images: [
+            {
+                url: "/mya-logo.png",
+                width: 400,
+                height: 160,
+                alt: "MYA PARTS",
+            }
+        ]
+    }
 };
 
 export default async function TodosProdutosPage() {
