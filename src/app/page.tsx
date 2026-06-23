@@ -297,7 +297,7 @@ export default async function Home() {
 
       {/* ─── GEO / E-E-A-T CONTENT SECTION ─── */}
       <section className="bg-white border-t border-b border-industrial-200">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 py-12 text-center md:text-left space-y-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-12 text-center md:text-left space-y-6">
           <h2 className="text-xl md:text-2xl font-extrabold text-industrial-900 tracking-tight">
             MYA PARTS: Soluções Completas em Peças para Empilhadeiras
           </h2>
