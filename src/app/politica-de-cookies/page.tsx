@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Cookie, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "Política de Cookies | MYA Parts",
+    title: "Política de Cookies da MYA PARTS: Sua Privacidade em Primeiro Lugar",
     description: "Saiba como o site MYA Parts utiliza cookies, para que servem e como você pode gerenciá-los conforme a LGPD.",
     alternates: {
         canonical: "/politica-de-cookies",
@@ -108,11 +108,19 @@ export default function CookiePolicyPage() {
                         <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#b0bec5]">Privacidade · Cookies</span>
                     </div>
                     <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-3">
-                        Política de Cookies
+                        Política de Cookies da MYA PARTS: Sua Privacidade em Primeiro Lugar
                     </h1>
-                    <p className="text-industrial-400 text-base leading-relaxed max-w-2xl">
-                        Transparência total sobre como usamos cookies neste site, com base nas exigências da LGPD (Lei nº 13.709/2018).
-                    </p>
+                    <div className="text-industrial-400 text-sm leading-relaxed max-w-3xl space-y-3 font-medium">
+                        <p>
+                            <strong>Cookies são pequenos arquivos de texto que sites armazenam em seu dispositivo (computador, tablet, celular) quando você os visita.</strong> Eles contêm informações que são enviadas de volta ao site a cada visita subsequente ou a outros sites que reconheçam o cookie, permitindo que o site "lembre" suas preferências ou ações ao longo do tempo. Esta é uma prática padrão na web para melhorar a experiência do usuário.
+                        </p>
+                        <p>
+                            <strong>Na MYA PARTS, utilizamos cookies para otimizar sua experiência de navegação e para entender como nosso site é utilizado, permitindo-nos aprimorar nossos serviços.</strong> Os cookies nos ajudam a personalizar o conteúdo, lembrar suas escolhas (como idioma ou itens no carrinho), e analisar o tráfego para identificar melhorias. Não utilizamos cookies para coletar informações pessoais sensíveis sem seu consentimento explícito.
+                        </p>
+                        <p>
+                            <strong>Você tem controle total sobre os cookies e pode gerenciá-los ou desativá-los a qualquer momento através das configurações do seu navegador.</strong> Embora a desativação de certos cookies possa afetar a funcionalidade completa do site, respeitamos sua decisão. Nossa Política de Cookies visa garantir transparência e proteger sua privacidade enquanto você interage com a MYA PARTS.
+                        </p>
+                    </div>
                     <p className="mt-4 text-xs text-industrial-500 font-medium">
                         Última atualização: 03 de março de 2026
                     </p>

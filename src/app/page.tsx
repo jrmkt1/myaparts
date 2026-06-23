@@ -1,8 +1,17 @@
 import Link from "next/link";
 import { Wrench, Zap, Disc, Droplets, ArrowRight, Package } from "lucide-react";
 import { db } from "@/lib/db";
+import type { Metadata } from "next";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+    title: "MYA PARTS: Soluções Completas em Peças para Empilhadeiras",
+    description: "Distribuidora de peças e componentes para empilhadeiras. Catálogo completo para Toyota, Hyster, Yale e outras marcas industriais.",
+    alternates: {
+        canonical: "/",
+    },
+};
 
 const QUICK_LINKS = [
   { href: "/busca?q=motor", icon: <Wrench size={24} />, label: "Motor", sub: "Sistemas de propulsão" },
@@ -32,54 +41,8 @@ export default async function Home() {
     })
   ]);
 
-  const orgSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "MYA Parts",
-    "legalName": "Mya Parts Material Handling Ltda",
-    "url": "https://myaparts.com.br",
-    "logo": "https://myaparts.com.br/mya-logo.png",
-    "cnpj": "62.401.620/0001-90",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Rua Eduardo Cesar Rocha, 276",
-      "addressLocality": "Araras",
-      "addressRegion": "SP",
-      "postalCode": "13603-181",
-      "addressCountry": "BR"
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+55-19-97144-1580",
-      "contactType": "sales",
-      "email": "contato@myaparts.com.br",
-      "areaServed": "BR",
-      "availableLanguage": "Portuguese"
-    }
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "MYA Parts",
-    "url": "https://myaparts.com.br",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://myaparts.com.br/busca?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  };
-
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
 
       {/* ─── HERO ─── */}
       <section
@@ -331,6 +294,26 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* ─── GEO / E-E-A-T CONTENT SECTION ─── */}
+      <section className="bg-white border-t border-b border-industrial-200">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-12 text-center md:text-left space-y-6">
+          <h2 className="text-xl md:text-2xl font-extrabold text-industrial-900 tracking-tight">
+            MYA PARTS: Soluções Completas em Peças para Empilhadeiras
+          </h2>
+          <div className="space-y-4 text-sm text-industrial-600 leading-relaxed font-medium">
+            <p>
+              <strong>A MYA PARTS é uma distribuidora especializada em peças e componentes para empilhadeiras, oferecendo um catálogo completo para as principais marcas do mercado.</strong> Nosso objetivo é fornecer soluções de alta qualidade que garantam a performance e a longevidade dos seus equipamentos industriais. Trabalhamos com peças genuínas e de reposição que atendem aos mais rigorosos padrões de segurança e eficiência.
+            </p>
+            <p>
+              <strong>Empilhadeiras são máquinas vitais para a logística e movimentação de materiais em diversos setores, desde armazéns e indústrias até portos e centros de distribuição.</strong> O bom funcionamento desses equipamentos depende diretamente da integridade e qualidade de cada componente. Peças como garfos, rodas, motores, sistemas hidráulicos e elétricos são cruciais para a operação contínua e segura.
+            </p>
+            <p>
+              <strong>A escolha correta das peças de reposição impacta diretamente a produtividade, a segurança operacional e os custos de manutenção da sua frota de empilhadeiras.</strong> Na MYA PARTS, você encontra suporte técnico especializado para identificar a peça exata que seu equipamento precisa, minimizando o tempo de inatividade e otimizando o seu investimento. Conte conosco para manter suas operações em pleno vapor com confiança e agilidade.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* ─── CTA STRIP ─── */}
       <section className="bg-industrial-900 mt-auto">
