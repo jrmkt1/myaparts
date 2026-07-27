@@ -62,6 +62,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             description,
             type: "website",
             images,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [imageUrl],
         }
     };
 }
@@ -93,7 +99,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         "@context": "https://schema.org",
         "@type": "Product",
         "name": product.name,
-        "image": absoluteImageUrl,
+        "image": [absoluteImageUrl],
         "description": product.description || `Peça de empilhadeira ${product.name} da marca ${product.brand.name} com Part Number ${product.part_number}.`,
         "sku": product.part_number,
         "mpn": product.part_number,
