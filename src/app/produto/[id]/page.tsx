@@ -7,6 +7,49 @@ import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Converte uma URL Cloudinary com transformações dinâmicas em uma URL limpa e estável.
+ * URLs de transformação (f_auto, overlays, ?_a=...) são ignoradas pelo Google Bot como imagem indexável.
+ * Esta função extrai o public_id e gera uma URL /image/upload/q_80/public_id.jpg legível.
+ */
+function cleanCloudinaryUrl(url: string): string {
+    try {
+        // Só processa URLs do Cloudinary
+        if (!url.includes("res.cloudinary.com")) return url;
+
+        // Remove query string (?_a=... ou outros params)
+        const withoutQuery = url.split("?")[0];
+
+        // Extrai a parte após /image/upload/ removendo todos os segmentos de transformação
+        // Segmentos de transformação contêm vírgulas ou começam com prefixos conhecidos (f_, q_, l_, fl_, g_, o_, w_)
+        const uploadIndex = withoutQuery.indexOf("/image/upload/");
+        if (uploadIndex === -1) return url;
+
+        const afterUpload = withoutQuery.slice(uploadIndex + "/image/upload/".length);
+        const segments = afterUpload.split("/");
+
+        // Filtra apenas os segmentos que NÃO são transformações do Cloudinary
+        // Segmentos de transformação contêm vírgulas, ou começam com prefixos Cloudinary
+        const transformPrefixes = /^(f_|q_|w_|h_|c_|g_|l_|o_|e_|r_|b_|d_|fl_|t_|a_|dpr_|ar_|x_|y_|z_|vc_|br_|fps_|du_|sp_|so_)/;
+        const publicIdSegments = segments.filter(
+            (seg) => !seg.includes(",") && !transformPrefixes.test(seg) && seg.length > 0
+        );
+
+        if (publicIdSegments.length === 0) return url;
+
+        // Monta a base do Cloudinary
+        const baseCloudinary = withoutQuery.slice(0, uploadIndex + "/image/upload/".length);
+
+        // Remove extensão original se houver, para forçar .jpg
+        const publicId = publicIdSegments.join("/").replace(/\.(jpg|jpeg|png|webp|avif|gif)$/i, "");
+
+        // Retorna URL limpa com qualidade fixa e extensão .jpg legível pelo Google
+        return `${baseCloudinary}q_80/${publicId}.jpg`;
+    } catch {
+        return url;
+    }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
 
@@ -30,13 +73,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
     const mainMedia = product.media[0];
-    const imageUrl = mainMedia?.url 
+    const rawImageUrl = mainMedia?.url 
         ? (mainMedia.url.startsWith("http") 
             ? mainMedia.url 
             : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
         : `${baseUrl}/mya-logo.png`;
+    // URL limpa sem transformações — essencial para indexação de imagem no Google
+    const imageUrl = cleanCloudinaryUrl(rawImageUrl);
         
-    const images = [{ url: imageUrl, alt: product.name }];
+    const images = [{ url: imageUrl, width: 800, height: 800, alt: product.name }];
 
     const keywords = [
         product.name,
@@ -89,11 +134,13 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     const mainMedia = product.media.find((m) => m.isMain) || product.media[0];
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
-    const absoluteImageUrl = mainMedia?.url 
+    const rawAbsoluteImageUrl = mainMedia?.url 
         ? (mainMedia.url.startsWith("http") 
             ? mainMedia.url 
             : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
         : `${baseUrl}/mya-logo.png`;
+    // URL sem transformações para o JSON-LD — o Google indexa com mais confiança
+    const absoluteImageUrl = cleanCloudinaryUrl(rawAbsoluteImageUrl);
 
     const jsonLd = {
         "@context": "https://schema.org",
