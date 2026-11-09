@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  /* MYA Navy Blue Monochromatic Palette */
-  --color-industrial-50: #f8fafd;
-  --color-industrial-100: #f1f4f9;
-  --color-industrial-200: #e0e7f1;
-  --color-industrial-300: #c5d2e4;
-  --color-industrial-400: #8aa1ba;
-  --color-industrial-500: #5e7a9a;
-  --color-industrial-600: #3c5277;
-  --color-industrial-700: #274069;
-  --color-industrial-800: #1a264a;
-  --color-industrial-900: #121b33;
+  /* MYA Industrial Neutral & Technical Palette */
+  --color-industrial-50: #f8fafc;
+  --color-industrial-100: #f1f5f9;
+  --color-industrial-200: #e2e8f0;
+  --color-industrial-300: #cbd5e1;
+  --color-industrial-400: #94a3b8;
+  --color-industrial-500: #64748b;
+  --color-industrial-600: #475569;
+  --color-industrial-700: #334155;
+  --color-industrial-800: #1e293b;
+  --color-industrial-900: #0f172a;
 
-  --color-action: #2b437e;
-  --color-action-hover: #1f3263;
+  --color-action: #15803d;
+  --color-action-hover: #166534;
 
-  --color-background: #f1f4f9;
-  --color-foreground: #1e293b;
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
 
   --font-sans: var(--font-inter);
 }
 
 :root {
-  --background: #f1f4f9;
-  --foreground: #1e293b;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
@@ -57,130 +57,57 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Smooth transitions for interactive elements */
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Focus visible styles */
 :focus-visible {
-  outline: 2px solid #2b437e;
+  outline: 2px solid #0f172a;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
-/* ── Hero entrance animations ── */
-@keyframes fadeInUp {
+@keyframes cardReveal {
   from {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(10px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+.product-card-reveal {
+  animation: cardReveal 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes scrollBounce {
-
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: translateY(8px);
-    opacity: 1;
-  }
-}
-
-@keyframes lineGrow {
-  from {
-    transform: scaleY(0);
-  }
-
-  to {
-    transform: scaleY(1);
-  }
-}
-
-/* Utility classes for hero animations */
-.hero-badge {
-  animation: fadeInUp 0.6s ease-out 0.1s both;
-}
-
-.hero-line-1 {
-  animation: fadeInUp 0.7s ease-out 0.25s both;
-}
-
-.hero-line-2 {
-  animation: fadeInUp 0.7s ease-out 0.40s both;
-}
-
-.hero-line-3 {
-  animation: fadeInUp 0.7s ease-out 0.55s both;
-}
-
-.hero-sub {
-  animation: fadeInUp 0.7s ease-out 0.65s both;
-}
-
-.hero-ctas {
-  animation: fadeInUp 0.7s ease-out 0.80s both;
-}
-
-.hero-trust {
-  animation: fadeIn 0.8s ease-out 1.00s both;
-}
-
-.hero-stat-1 {
-  animation: fadeInUp 0.6s ease-out 0.45s both;
-}
-
-.hero-stat-2 {
-  animation: fadeInUp 0.6s ease-out 0.60s both;
-}
-
-.hero-stat-3 {
-  animation: fadeInUp 0.6s ease-out 0.75s both;
-}
-
-.hero-scroll {
-  animation: fadeIn 1s ease-out 1.2s both;
-}
-
-.scroll-bounce {
-  animation: scrollBounce 1.8s ease-in-out infinite;
-}
-
-/* ── Cookie banner animation ── */
+/* Cookie banner animation */
 @keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(100%);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

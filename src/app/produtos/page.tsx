@@ -8,13 +8,13 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "Todos os Produtos | MYA Parts",
-    description: "Navegue pelo catálogo completo de peças para empilhadeiras. Milhares de códigos OEM de diversas marcas prontas para cotação.",
+    description: "Navegue pelo catálogo completo de peças para empilhadeiras. Códigos OEM de diversas marcas prontos para cotação.",
     alternates: {
         canonical: "/produtos",
     },
     openGraph: {
         title: "Todos os Produtos | MYA Parts",
-        description: "Navegue pelo catálogo completo de peças para empilhadeiras. Milhares de códigos OEM de diversas marcas prontas para cotação.",
+        description: "Navegue pelo catálogo completo de peças para empilhadeiras. Códigos OEM de diversas marcas prontos para cotação.",
         type: "website",
         images: [
             {
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
                 width: 400,
                 height: 160,
                 alt: "MYA PARTS",
-            }
-        ]
-    }
+            },
+        ],
+    },
 };
 
 export default async function TodosProdutosPage() {
@@ -33,7 +33,7 @@ export default async function TodosProdutosPage() {
             include: {
                 category: true,
                 brand: true,
-                media: { where: { isMain: true }, take: 1 }
+                media: { orderBy: { isMain: "desc" }, take: 1 },
             },
             orderBy: { createdAt: "desc" },
             take: 100,
@@ -41,22 +41,21 @@ export default async function TodosProdutosPage() {
         db.brand.findMany({
             where: {
                 products: { some: {} },
-                name: { notIn: ["Genérica", "GENÉRICA", "Generica"] }
+                name: { notIn: ["Genérica", "GENÉRICA", "Generica"] },
             },
             take: 20,
-            orderBy: { products: { _count: "desc" } }
-        })
+            orderBy: { products: { _count: "desc" } },
+        }),
     ]);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12 min-h-[60vh]">
-
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10 min-h-[60vh]">
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl md:text-3xl font-extrabold text-industrial-900 tracking-tight">
+            <div className="mb-6">
+                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight uppercase">
                     Catálogo Completo
                 </h1>
-                <p className="text-industrial-400 mt-1.5 text-sm font-medium">
+                <p className="text-slate-500 mt-1 text-sm font-medium">
                     {products.length > 0
                         ? `${products.length} peça${products.length !== 1 ? "s" : ""} disponíve${products.length !== 1 ? "is" : "l"}`
                         : "Navegue por todas as peças disponíveis"}
@@ -65,16 +64,16 @@ export default async function TodosProdutosPage() {
 
             {/* BRANDS */}
             {topBrands.length > 0 && (
-                <div className="mb-8 bg-industrial-100/50 p-6 rounded-xl border border-industrial-200">
-                    <h2 className="text-sm font-extrabold text-industrial-900 uppercase tracking-wider mb-4">
-                        Peças para as principais marcas de empilhadeiras do mercado
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
+                <div className="mb-6 bg-white p-4 rounded-[2px] border border-slate-200">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mr-1">
+                            Marcas:
+                        </span>
                         {topBrands.map((brand) => (
                             <Link
                                 key={brand.id}
                                 href={`/busca?q=${encodeURIComponent(brand.name)}`}
-                                className="px-4 py-2 bg-white border border-industrial-200 rounded-lg text-xs font-bold text-industrial-600 hover:text-industrial-900 hover:border-industrial-400 hover:shadow-sm transition-all uppercase tracking-wider"
+                                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-[2px] text-xs font-bold text-slate-700 hover:text-white hover:bg-slate-900 hover:border-slate-900 transition-colors uppercase tracking-wider"
                             >
                                 {brand.name}
                             </Link>
@@ -85,12 +84,12 @@ export default async function TodosProdutosPage() {
 
             {/* Empty state */}
             {products.length === 0 && (
-                <div className="bg-white border border-industrial-200 rounded-xl p-12 text-center">
-                    <div className="w-14 h-14 bg-industrial-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <Package size={28} className="text-industrial-400" />
+                <div className="bg-white border border-slate-200 rounded-[2px] p-12 text-center">
+                    <div className="w-14 h-14 bg-slate-100 rounded-[2px] flex items-center justify-center mx-auto mb-4">
+                        <Package size={28} className="text-slate-400" />
                     </div>
-                    <h3 className="text-lg font-extrabold text-industrial-800 mb-1">Catálogo Vazio</h3>
-                    <p className="text-industrial-400 text-sm">
+                    <h3 className="text-lg font-extrabold text-slate-800 mb-1">Catálogo Vazio</h3>
+                    <p className="text-slate-400 text-sm">
                         Entre no Painel Admin para cadastrar as primeiras peças.
                     </p>
                 </div>
@@ -98,8 +97,8 @@ export default async function TodosProdutosPage() {
 
             {/* Grid */}
             {products.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {products.map((product) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                    {products.map((product, index) => (
                         <ProductCard
                             key={product.id}
                             id={product.id}
@@ -108,6 +107,8 @@ export default async function TodosProdutosPage() {
                             brand={product.brand}
                             category={product.category}
                             media={product.media}
+                            priority={index < 2}
+                            eager={index >= 2 && index < 4}
                         />
                     ))}
                 </div>
