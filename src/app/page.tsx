@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wrench, Zap, Disc, Droplets, Cog, CircleDot, ArrowRight, Package } from "lucide-react";
+import { Wrench, Zap, Disc, Droplets, Cog, CircleDot, ArrowRight, Package, ChevronRight } from "lucide-react";
 import { db } from "@/lib/db";
 import ProductCard from "@/components/catalog/ProductCard";
 import type { Metadata } from "next";
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 };
 
 const SYSTEM_FILTERS = [
-    { href: "/busca?q=motor", icon: Wrench, label: "Motor" },
-    { href: "/busca?q=freio", icon: Disc, label: "Freio" },
-    { href: "/busca?q=hidraulico", icon: Droplets, label: "Hidráulico" },
-    { href: "/busca?q=eletrico", icon: Zap, label: "Elétrico" },
-    { href: "/busca?q=transmissao", icon: Cog, label: "Transmissão" },
-    { href: "/busca?q=rolamento", icon: CircleDot, label: "Rolamentos" },
+    { href: "/busca?q=motor", icon: Wrench, label: "Motor", sub: "Blocos, pistões e filtros" },
+    { href: "/busca?q=freio", icon: Disc, label: "Freio", sub: "Sapatas, cilindros e lonas" },
+    { href: "/busca?q=hidraulico", icon: Droplets, label: "Hidráulico", sub: "Bombas, cilindros e reparos" },
+    { href: "/busca?q=eletrico", icon: Zap, label: "Elétrico", sub: "Partida, sensores e chicotes" },
+    { href: "/busca?q=transmissao", icon: Cog, label: "Transmissão", sub: "Discos, conversores e eixos" },
+    { href: "/busca?q=rolamento", icon: CircleDot, label: "Rolamentos", sub: "Mastros, torres e rodas" },
 ];
 
 export default async function Home() {
@@ -30,7 +30,7 @@ export default async function Home() {
                 products: { some: {} },
                 name: { notIn: ["Genérica", "GENÉRICA", "Generica"] },
             },
-            take: 12,
+            take: 9,
             orderBy: { products: { _count: "desc" } },
         }),
         db.product.findMany({
@@ -65,44 +65,77 @@ export default async function Home() {
 
     return (
         <div className="flex flex-col min-h-screen font-sans bg-slate-50">
-            {/* ─── COMPACT FILTER BAR (SISTEMAS & MARCAS) ─── */}
-            <section className="bg-white border-b border-slate-200">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 space-y-2.5">
-                    {/* Quick System Pills */}
-                    <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
-                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 shrink-0 mr-1">
-                            Sistemas:
-                        </span>
-                        {SYSTEM_FILTERS.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-[2px] text-xs font-extrabold text-slate-800 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-colors shrink-0 uppercase tracking-wider"
-                                >
-                                    <Icon size={13} />
-                                    {item.label}
-                                </Link>
-                            );
-                        })}
+            {/* ─── FULL-WIDTH STRUCTURED SYSTEMS & BRANDS SECTION ─── */}
+            <section className="bg-white border-b border-slate-200 shadow-2xs">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 py-5 space-y-4">
+                    {/* Row 1: 6 Full-Width Industrial System Cards */}
+                    <div>
+                        <div className="flex items-center justify-between mb-2.5">
+                            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#121b33] flex items-center gap-2">
+                                <span className="w-1.5 h-3.5 bg-[#121b33] inline-block" />
+                                Filtrar por Sistema
+                            </span>
+                            <Link
+                                href="/produtos"
+                                className="text-[11px] font-bold text-slate-500 hover:text-[#121b33] uppercase tracking-wider transition-colors"
+                            >
+                                Ver todas as categorias →
+                            </Link>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+                            {SYSTEM_FILTERS.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="group flex items-center gap-3 p-3 bg-slate-50/90 hover:bg-[#121b33] border border-slate-200 hover:border-[#121b33] rounded-[2px] transition-all duration-200 shadow-2xs hover:shadow-md"
+                                    >
+                                        <div className="w-9 h-9 rounded-[2px] bg-[#121b33] group-hover:bg-white text-white group-hover:text-[#121b33] flex items-center justify-center shrink-0 transition-colors">
+                                            <Icon size={17} />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <div className="flex items-center justify-between gap-1">
+                                                <span className="text-xs font-extrabold text-[#121b33] group-hover:text-white uppercase tracking-wider truncate transition-colors">
+                                                    {item.label}
+                                                </span>
+                                                <ChevronRight
+                                                    size={13}
+                                                    className="text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0"
+                                                />
+                                            </div>
+                                            <span className="block text-[10px] font-medium text-slate-500 group-hover:text-slate-300 truncate mt-0.5 transition-colors">
+                                                {item.sub}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    {/* Brand Pills */}
+                    {/* Row 2: Full-Width Uniform Brand Grid */}
                     {topBrands.length > 0 && (
-                        <div className="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pt-0.5">
-                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 shrink-0 mr-1">
-                                Marcas:
-                            </span>
-                            {topBrands.map((brand) => (
-                                <Link
-                                    key={brand.id}
-                                    href={`/busca?q=${encodeURIComponent(brand.name)}`}
-                                    className="px-2.5 py-1 bg-white border border-slate-200 rounded-[2px] text-[11px] font-bold text-slate-600 hover:text-slate-900 hover:border-slate-900 transition-colors uppercase tracking-wider shrink-0"
-                                >
-                                    {brand.name}
-                                </Link>
-                            ))}
+                        <div className="pt-3 border-t border-slate-100">
+                            <div className="flex flex-col lg:flex-row lg:items-center gap-2.5 lg:gap-4">
+                                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#121b33] shrink-0 flex items-center gap-2">
+                                    <span className="w-1.5 h-3.5 bg-[#1a264a] inline-block" />
+                                    Principais Marcas:
+                                </span>
+
+                                <div className="flex-1 grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+                                    {topBrands.map((brand) => (
+                                        <Link
+                                            key={brand.id}
+                                            href={`/busca?q=${encodeURIComponent(brand.name)}`}
+                                            className="flex items-center justify-center px-3 py-2 bg-white hover:bg-[#121b33] border border-slate-200 hover:border-[#121b33] rounded-[2px] text-[11px] font-extrabold text-slate-700 hover:text-white uppercase tracking-wider text-center transition-all shadow-2xs"
+                                        >
+                                            <span className="truncate">{brand.name}</span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -113,7 +146,7 @@ export default async function Home() {
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                         <div className="flex items-baseline gap-3">
-                            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight uppercase">
+                            <h1 className="text-xl md:text-2xl font-extrabold text-[#121b33] tracking-tight uppercase">
                                 Peças em Destaque
                             </h1>
                             {totalCount > 0 && (
@@ -138,7 +171,7 @@ export default async function Home() {
 
                             <Link
                                 href="/produtos"
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-300 hover:border-slate-900 text-slate-900 rounded-[2px] text-xs font-extrabold uppercase tracking-wider transition-colors"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-300 hover:border-[#121b33] text-[#121b33] rounded-[2px] text-xs font-extrabold uppercase tracking-wider transition-colors"
                             >
                                 Catálogo Completo
                                 <ArrowRight size={14} />
@@ -172,7 +205,7 @@ export default async function Home() {
                             <div className="mt-8 flex justify-center">
                                 <Link
                                     href="/produtos"
-                                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-white border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-[2px] font-extrabold text-xs md:text-sm uppercase tracking-widest transition-colors"
+                                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-white border-2 border-[#121b33] text-[#121b33] hover:bg-[#121b33] hover:text-white rounded-[2px] font-extrabold text-xs md:text-sm uppercase tracking-widest transition-colors"
                                 >
                                     Ver Todas as Peças ({totalCount})
                                     <ArrowRight size={16} />
@@ -187,7 +220,7 @@ export default async function Home() {
             <section className="bg-white border-t border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-7 flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-center md:text-left">
-                        <h2 className="text-base md:text-lg font-extrabold text-slate-900 tracking-tight">
+                        <h2 className="text-base md:text-lg font-extrabold text-[#121b33] tracking-tight">
                             Não encontrou o código da peça?
                         </h2>
                         <p className="text-slate-500 text-xs md:text-sm font-medium mt-0.5">
@@ -205,7 +238,7 @@ export default async function Home() {
                         </a>
                         <a
                             href="mailto:contato@myaparts.com.br"
-                            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-50 border border-slate-300 hover:border-slate-900 text-slate-800 rounded-[2px] font-bold text-xs md:text-sm tracking-wide transition-colors"
+                            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-50 border border-slate-300 hover:border-[#121b33] text-[#121b33] rounded-[2px] font-bold text-xs md:text-sm tracking-wide transition-colors"
                         >
                             contato@myaparts.com.br
                         </a>

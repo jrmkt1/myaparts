@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* MYA Industrial Neutral & Technical Palette */
+  /* MYA Industrial Neutral Surfaces + Brand Navy */
   --color-industrial-50: #f8fafc;
   --color-industrial-100: #f1f5f9;
   --color-industrial-200: #e2e8f0;
@@ -9,12 +9,12 @@
   --color-industrial-400: #94a3b8;
   --color-industrial-500: #64748b;
   --color-industrial-600: #475569;
-  --color-industrial-700: #334155;
-  --color-industrial-800: #1e293b;
-  --color-industrial-900: #0f172a;
+  --color-industrial-700: #274069;
+  --color-industrial-800: #1a264a;
+  --color-industrial-900: #121b33;
 
-  --color-action: #15803d;
-  --color-action-hover: #166534;
+  --color-action: #1a264a;
+  --color-action-hover: #121b33;
 
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
@@ -69,7 +69,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #0f172a;
+  outline: 2px solid #121b33;
   outline-offset: 2px;
   border-radius: 2px;
 }
