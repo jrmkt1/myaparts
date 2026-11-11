@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TodosProdutosPage() {
-    const [products, topBrands] = await Promise.all([
+    const [products, totalCount, topBrands] = await Promise.all([
         db.product.findMany({
             include: {
                 category: true,
@@ -36,8 +36,8 @@ export default async function TodosProdutosPage() {
                 media: { orderBy: { isMain: "desc" }, take: 1 },
             },
             orderBy: { createdAt: "desc" },
-            take: 100,
         }),
+        db.product.count(),
         db.brand.findMany({
             where: {
                 products: { some: {} },
@@ -52,12 +52,12 @@ export default async function TodosProdutosPage() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10 min-h-[60vh]">
             {/* Header */}
             <div className="mb-6">
-                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight uppercase">
+                <h1 className="text-2xl md:text-3xl font-extrabold text-[#121b33] tracking-tight uppercase">
                     Catálogo Completo
                 </h1>
                 <p className="text-slate-500 mt-1 text-sm font-medium">
-                    {products.length > 0
-                        ? `${products.length} peça${products.length !== 1 ? "s" : ""} disponíve${products.length !== 1 ? "is" : "l"}`
+                    {totalCount > 0
+                        ? `${totalCount.toLocaleString("pt-BR")} peça${totalCount !== 1 ? "s" : ""} disponíve${totalCount !== 1 ? "is" : "l"}`
                         : "Navegue por todas as peças disponíveis"}
                 </p>
             </div>
@@ -73,7 +73,7 @@ export default async function TodosProdutosPage() {
                             <Link
                                 key={brand.id}
                                 href={`/busca?q=${encodeURIComponent(brand.name)}`}
-                                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-[2px] text-xs font-bold text-slate-700 hover:text-white hover:bg-slate-900 hover:border-slate-900 transition-colors uppercase tracking-wider"
+                                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-[2px] text-xs font-bold text-slate-700 hover:text-white hover:bg-[#121b33] hover:border-[#121b33] transition-colors uppercase tracking-wider"
                             >
                                 {brand.name}
                             </Link>

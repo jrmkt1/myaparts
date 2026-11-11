@@ -20,18 +20,14 @@ export async function createProductAction(formData: FormData) {
         const categoryId = formData.get("categoryId") as string;
         const brandId = formData.get("brandId") as string;
 
-        // We expect the image to be uploaded via some specialized tool later, but for now we create the entity
-        // We will save fake data for photos to let the layout work as an MVP.
         const fakeImageURL = formData.get("imageUrl") as string | null;
 
         if (!name || !part_number || !categoryId || !brandId) {
             return { error: "Campos obrigatórios: Nome, Part Number, Categoria e Marca." };
         }
 
-        // 1. Process Tolerant Search Query automatically inside the Action
         const clean_part_number = cleanPartNumber(part_number);
 
-        // 2. Insert into DB
         const newProduct = await db.product.create({
             data: {
                 name,
@@ -42,19 +38,25 @@ export async function createProductAction(formData: FormData) {
                 price,
                 categoryId,
                 brandId,
-                media: fakeImageURL ? {
-                    create: [{
-                        url: fakeImageURL, // Note: In real life, use S3/Hostinger bucket. Here we accept standard URL for testing MVP
-                        type: "IMAGE_2D",
-                        isMain: true
-                    }]
-                } : undefined
-            }
+                media: fakeImageURL
+                    ? {
+                          create: [
+                              {
+                                  url: fakeImageURL,
+                                  type: "IMAGE_2D",
+                                  isMain: true,
+                              },
+                          ],
+                      }
+                    : undefined,
+            },
         });
 
+        revalidatePath("/");
+        revalidatePath("/produtos");
+        revalidatePath("/busca");
         revalidatePath("/painel/produtos");
         return { success: true, productId: newProduct.id };
-
     } catch (error) {
         console.error("[CREATE_PRODUCT_ERROR]", error);
         return { error: "Erro interno no servidor ao cadastrar produto." };
@@ -84,7 +86,6 @@ export async function updateProductAction(productId: string, formData: FormData)
 
         const clean_part_number = cleanPartNumber(part_number);
 
-        // Update basic text data
         await db.product.update({
             where: { id: productId },
             data: {
@@ -96,26 +97,26 @@ export async function updateProductAction(productId: string, formData: FormData)
                 price,
                 categoryId,
                 brandId,
-            }
+            },
         });
 
-        // Only update image if a new one was uploaded
         if (fakeImageURL) {
-            // we delete previous ones for simplicity in this MVP
             await db.productMedia.deleteMany({ where: { productId } });
             await db.productMedia.create({
                 data: {
                     productId,
                     url: fakeImageURL,
                     type: "IMAGE_2D",
-                    isMain: true
-                }
+                    isMain: true,
+                },
             });
         }
 
+        revalidatePath("/");
+        revalidatePath("/produtos");
+        revalidatePath("/busca");
         revalidatePath("/painel/produtos");
         return { success: true, productId };
-
     } catch (error) {
         console.error("[UPDATE_PRODUCT_ERROR]", error);
         return { error: "Erro interno no servidor ao atualizar o produto." };
@@ -130,8 +131,11 @@ export async function deleteProductAction(productId: string) {
         }
 
         await db.product.delete({
-            where: { id: productId }
+            where: { id: productId },
         });
+        revalidatePath("/");
+        revalidatePath("/produtos");
+        revalidatePath("/busca");
         revalidatePath("/painel/produtos");
         return { success: true };
     } catch (error) {

@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Wrench, Zap, Disc, Droplets, Cog, CircleDot, ArrowRight, Package, ChevronRight } from "lucide-react";
+import { Wrench, Zap, Disc, Droplets, Cog, CircleDot, ArrowRight, Package, ChevronRight, MapPin } from "lucide-react";
 import { db } from "@/lib/db";
 import ProductCard from "@/components/catalog/ProductCard";
 import type { Metadata } from "next";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "MYA PARTS | Peças para Empilhadeiras",
@@ -65,6 +65,61 @@ export default async function Home() {
 
     return (
         <div className="flex flex-col min-h-screen font-sans bg-slate-50">
+            {/* ─── FULL-WIDTH HERO BANNER (REAL FORKLIFT + CONCRETE SITE INFO) ─── */}
+            <section className="relative w-full min-h-[300px] md:min-h-[380px] lg:min-h-[420px] flex items-center overflow-hidden bg-slate-900 border-b border-slate-200">
+                <img
+                    src="/hero-forklift.jpg"
+                    alt="Empilhadeira industrial em armazém logístico - MYA Parts"
+                    width={1920}
+                    height={1080}
+                    fetchPriority="high"
+                    decoding="sync"
+                    className="absolute inset-0 w-full h-full object-cover object-center md:object-right"
+                />
+
+                {/* Left-only directional scrim so text is crisp and the forklift on the right remains 100% clear */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0b1120]/95 via-[#0b1120]/75 md:via-[#0b1120]/55 to-transparent" />
+
+                <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14">
+                    <div className="max-w-xl space-y-4">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 rounded-[2px] text-white text-[11px] font-extrabold uppercase tracking-widest">
+                            <MapPin size={12} className="text-[#25D366]" />
+                            MYA Parts · Araras/SP
+                        </div>
+
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-[1.12] uppercase">
+                            Peças e Componentes para Empilhadeiras
+                        </h1>
+
+                        <p className="text-slate-200 text-xs sm:text-sm md:text-base leading-relaxed font-medium">
+                            Reposição para sistemas de Motor, Freio, Hidráulico, Elétrico, Transmissão e Rolamentos. Consulte pelo código OEM (Part Number) ou fale direto com nosso atendimento comercial.
+                        </p>
+
+                        <div className="pt-2 flex flex-wrap items-center gap-3">
+                            <Link
+                                href="/produtos"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 text-[#121b33] rounded-[2px] font-extrabold text-xs md:text-sm uppercase tracking-wider transition-colors shadow-lg"
+                            >
+                                Catálogo Completo ({totalCount.toLocaleString("pt-BR")} peças)
+                                <ArrowRight size={15} />
+                            </Link>
+
+                            <a
+                                href="https://wa.me/5519971441580?text=Ol%C3%A1%2C%20gostaria%20de%20cotar%20uma%20pe%C3%A7a%20para%20empilhadeira."
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-[#16a34a] hover:bg-[#15803d] text-white rounded-[2px] font-extrabold text-xs md:text-sm uppercase tracking-wider transition-colors shadow-lg"
+                            >
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                                </svg>
+                                WhatsApp (19) 97144-1580
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* ─── FULL-WIDTH STRUCTURED SYSTEMS & BRANDS SECTION ─── */}
             <section className="bg-white border-b border-slate-200 shadow-2xs">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 py-5 space-y-4">
@@ -141,39 +196,27 @@ export default async function Home() {
                 </div>
             </section>
 
-            {/* ─── DIRECT PARTS SHOWCASE (ABOVE THE FOLD) ─── */}
+            {/* ─── DIRECT PARTS SHOWCASE ─── */}
             <section className="flex-1 py-6 md:py-8">
                 <div className="max-w-7xl mx-auto px-4 md:px-6">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                         <div className="flex items-baseline gap-3">
-                            <h1 className="text-xl md:text-2xl font-extrabold text-[#121b33] tracking-tight uppercase">
+                            <h2 className="text-xl md:text-2xl font-extrabold text-[#121b33] tracking-tight uppercase">
                                 Peças em Destaque
-                            </h1>
+                            </h2>
                             {totalCount > 0 && (
                                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                                    ({totalCount} cadastradas)
+                                    ({totalCount.toLocaleString("pt-BR")} cadastradas)
                                 </span>
                             )}
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <a
-                                href="https://wa.me/5519971441580?text=Ol%C3%A1%2C%20gostaria%20de%20cotar%20uma%20pe%C3%A7a%20para%20empilhadeira."
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-[#16a34a] hover:bg-[#15803d] text-white rounded-[2px] font-extrabold text-xs uppercase tracking-wider transition-colors shadow-xs"
-                            >
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                                </svg>
-                                Cotar no WhatsApp
-                            </a>
-
                             <Link
                                 href="/produtos"
                                 className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-300 hover:border-[#121b33] text-[#121b33] rounded-[2px] text-xs font-extrabold uppercase tracking-wider transition-colors"
                             >
-                                Catálogo Completo
+                                Ver Todas ({totalCount.toLocaleString("pt-BR")})
                                 <ArrowRight size={14} />
                             </Link>
                         </div>
@@ -196,8 +239,8 @@ export default async function Home() {
                                         brand={product.brand}
                                         category={product.category}
                                         media={product.media}
-                                        priority={index < 2}
-                                        eager={index >= 2 && index < 4}
+                                        priority={index === 0}
+                                        eager={index >= 1 && index < 4}
                                     />
                                 ))}
                             </div>
@@ -207,7 +250,7 @@ export default async function Home() {
                                     href="/produtos"
                                     className="inline-flex items-center gap-2 px-7 py-3.5 bg-white border-2 border-[#121b33] text-[#121b33] hover:bg-[#121b33] hover:text-white rounded-[2px] font-extrabold text-xs md:text-sm uppercase tracking-widest transition-colors"
                                 >
-                                    Ver Todas as Peças ({totalCount})
+                                    Ver Todas as Peças ({totalCount.toLocaleString("pt-BR")})
                                     <ArrowRight size={16} />
                                 </Link>
                             </div>
