@@ -21,22 +21,22 @@ export async function searchAutocomplete(q: string) {
                     { clean_part_number: { contains: cleanedQuery } },
                     { category: { name: { contains: rawQuery } } },
                     { brand: { name: { contains: rawQuery } } },
-                ]
+                ],
             },
             include: {
-                media: { where: { isMain: true }, take: 1 },
+                media: { orderBy: { isMain: "desc" }, take: 1 },
                 category: true,
-                brand: true
+                brand: true,
             },
-            take: 5,
+            orderBy: { createdAt: "desc" },
+            take: 8,
         });
 
-        // We only return what we need to minimize wire size
-        return results.map(r => ({
+        return results.map((r) => ({
             id: r.id,
             name: r.name,
             part_number: r.part_number,
-            slug: r.part_number, // We need slug or pn to redirect
+            slug: r.id,
             brand: r.brand?.name || null,
             category: r.category?.name || null,
             image: r.media[0]?.url || null,

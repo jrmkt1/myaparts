@@ -14,22 +14,15 @@ export const dynamic = "force-dynamic";
  */
 function cleanCloudinaryUrl(url: string): string {
     try {
-        // Só processa URLs do Cloudinary
         if (!url.includes("res.cloudinary.com")) return url;
 
-        // Remove query string (?_a=... ou outros params)
         const withoutQuery = url.split("?")[0];
-
-        // Extrai a parte após /image/upload/ removendo todos os segmentos de transformação
-        // Segmentos de transformação contêm vírgulas ou começam com prefixos conhecidos (f_, q_, l_, fl_, g_, o_, w_)
         const uploadIndex = withoutQuery.indexOf("/image/upload/");
         if (uploadIndex === -1) return url;
 
         const afterUpload = withoutQuery.slice(uploadIndex + "/image/upload/".length);
         const segments = afterUpload.split("/");
 
-        // Filtra apenas os segmentos que NÃO são transformações do Cloudinary
-        // Segmentos de transformação contêm vírgulas, ou começam com prefixos Cloudinary
         const transformPrefixes = /^(f_|q_|w_|h_|c_|g_|l_|o_|e_|r_|b_|d_|fl_|t_|a_|dpr_|ar_|x_|y_|z_|vc_|br_|fps_|du_|sp_|so_)/;
         const publicIdSegments = segments.filter(
             (seg) => !seg.includes(",") && !transformPrefixes.test(seg) && seg.length > 0
@@ -37,13 +30,9 @@ function cleanCloudinaryUrl(url: string): string {
 
         if (publicIdSegments.length === 0) return url;
 
-        // Monta a base do Cloudinary
         const baseCloudinary = withoutQuery.slice(0, uploadIndex + "/image/upload/".length);
-
-        // Remove extensão original se houver, para forçar .jpg
         const publicId = publicIdSegments.join("/").replace(/\.(jpg|jpeg|png|webp|avif|gif)$/i, "");
 
-        // Retorna URL limpa com qualidade fixa e extensão .jpg legível pelo Google
         return `${baseCloudinary}q_80/${publicId}.jpg`;
     } catch {
         return url;
@@ -52,35 +41,37 @@ function cleanCloudinaryUrl(url: string): string {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
+    const decodedId = decodeURIComponent(id);
 
-    const product = await db.product.findUnique({
-        where: { id },
+    const product = await db.product.findFirst({
+        where: {
+            OR: [{ id: decodedId }, { part_number: decodedId }],
+        },
         include: {
             brand: true,
             category: true,
-            media: { where: { isMain: true }, take: 1 }
-        }
+            media: { orderBy: { isMain: "desc" }, take: 1 },
+        },
     });
 
     if (!product) {
         return {
-            title: "Peça Não Encontrada | MYA Parts"
+            title: "Peça Não Encontrada | MYA Parts",
         };
     }
 
     const title = `${product.name} - PN: ${product.part_number}${product.part_number_sec ? ` / ${product.part_number_sec}` : ""} | MYA Parts`;
     const description = `Peça de empilhadeira ${product.name} (Part Number OEM: ${product.part_number}${product.part_number_sec ? `, Cód. Secundário: ${product.part_number_sec}` : ""}) da marca ${product.brand.name}. Envie sua cotação na MYA Parts.`;
-    
+
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
     const mainMedia = product.media[0];
-    const rawImageUrl = mainMedia?.url 
-        ? (mainMedia.url.startsWith("http") 
-            ? mainMedia.url 
-            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
+    const rawImageUrl = mainMedia?.url
+        ? mainMedia.url.startsWith("http")
+            ? mainMedia.url
+            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`
         : `${baseUrl}/mya-logo.png`;
-    // URL limpa sem transformações — essencial para indexação de imagem no Google
     const imageUrl = cleanCloudinaryUrl(rawImageUrl);
-        
+
     const images = [{ url: imageUrl, width: 800, height: 800, alt: product.name }];
 
     const keywords = [
@@ -89,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         product.brand.name,
         product.category.name,
         "peças para empilhadeiras",
-        "mya parts"
+        "mya parts",
     ];
     if (product.part_number_sec) {
         keywords.push(product.part_number_sec);
@@ -100,7 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         description,
         keywords,
         alternates: {
-            canonical: `/produto/${id}`
+            canonical: `/produto/${product.id}`,
         },
         openGraph: {
             title,
@@ -113,20 +104,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             title,
             description,
             images: [imageUrl],
-        }
+        },
     };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const decodedId = decodeURIComponent(id);
 
-    const product = await db.product.findUnique({
-        where: { id },
+    const product = await db.product.findFirst({
+        where: {
+            OR: [{ id: decodedId }, { part_number: decodedId }],
+        },
         include: {
             category: true,
             brand: true,
-            media: { orderBy: { order: "asc" } }
-        }
+            media: { orderBy: { order: "asc" } },
+        },
     });
 
     if (!product) notFound();
@@ -134,50 +128,53 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     const mainMedia = product.media.find((m) => m.isMain) || product.media[0];
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://myaparts.com.br";
-    const rawAbsoluteImageUrl = mainMedia?.url 
-        ? (mainMedia.url.startsWith("http") 
-            ? mainMedia.url 
-            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`)
+    const rawAbsoluteImageUrl = mainMedia?.url
+        ? mainMedia.url.startsWith("http")
+            ? mainMedia.url
+            : `${baseUrl}${mainMedia.url.startsWith("/") ? "" : "/"}${mainMedia.url}`
         : `${baseUrl}/mya-logo.png`;
-    // URL sem transformações para o JSON-LD — o Google indexa com mais confiança
     const absoluteImageUrl = cleanCloudinaryUrl(rawAbsoluteImageUrl);
 
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Product",
-        "name": product.name,
-        "image": [absoluteImageUrl],
-        "description": product.description || `Peça de empilhadeira ${product.name} da marca ${product.brand.name} com Part Number ${product.part_number}.`,
-        "sku": product.part_number,
-        "mpn": product.part_number,
-        "brand": {
+        name: product.name,
+        image: [absoluteImageUrl],
+        description:
+            product.description ||
+            `Peça de empilhadeira ${product.name} da marca ${product.brand.name} com Part Number ${product.part_number}.`,
+        sku: product.part_number,
+        mpn: product.part_number,
+        brand: {
             "@type": "Brand",
-            "name": product.brand.name
+            name: product.brand.name,
         },
-        "category": product.category.name,
-        "offers": {
+        category: product.category.name,
+        offers: {
             "@type": "Offer",
-            "price": product.price ? product.price.toString() : "0.00",
-            "priceCurrency": "BRL",
-            "availability": "https://schema.org/InStock",
-            "url": `${baseUrl}/produto/${product.id}`
-        }
+            price: product.price ? product.price.toString() : "0.00",
+            priceCurrency: "BRL",
+            availability: "https://schema.org/InStock",
+            url: `${baseUrl}/produto/${product.id}`,
+        },
     };
 
     return (
         <div className="min-h-[70vh] font-sans">
-            {/* JSON-LD Schema Markup */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10">
-
                 {/* Breadcrumb */}
                 <nav className="mb-6 flex items-center gap-2 text-xs font-bold text-industrial-400 uppercase tracking-widest">
-                    <Link href="/" className="hover:text-action transition-colors">Início</Link>
+                    <Link href="/" className="hover:text-action transition-colors">
+                        Início
+                    </Link>
                     <span>/</span>
-                    <Link href="/produtos" className="hover:text-action transition-colors">Catálogo</Link>
+                    <Link href="/produtos" className="hover:text-action transition-colors">
+                        Catálogo
+                    </Link>
                     <span>/</span>
                     <span className="text-industrial-600 truncate max-w-[200px]">{product.name}</span>
                 </nav>
@@ -194,7 +191,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 {/* Main card */}
                 <div className="bg-white rounded-2xl border border-industrial-200 shadow-sm overflow-hidden">
                     <div className="grid grid-cols-1 lg:grid-cols-2">
-
                         {/* Image panel */}
                         <div className="bg-industrial-50 flex items-center justify-center p-8 md:p-14 border-b lg:border-b-0 lg:border-r border-industrial-200 min-h-[320px] md:min-h-[480px] relative">
                             {mainMedia ? (
@@ -215,11 +211,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                             {/* Gallery strip (if multiple images) */}
                             {product.media.length > 1 && (
                                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                                    {product.media.map((m, i) => (
+                                    {product.media.map((m) => (
                                         <div
                                             key={m.id}
-                                            className={`w-2 h-2 rounded-full transition-all ${m.isMain ? "bg-action scale-125" : "bg-industrial-300"
-                                                }`}
+                                            className={`w-2 h-2 rounded-full transition-all ${
+                                                m.isMain ? "bg-action scale-125" : "bg-industrial-300"
+                                            }`}
                                         />
                                     ))}
                                 </div>
@@ -228,7 +225,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
                         {/* Details panel */}
                         <div className="p-6 md:p-10 flex flex-col justify-between gap-6">
-
                             {/* Tags */}
                             <div className="flex flex-wrap gap-2">
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold bg-industrial-900 text-white uppercase tracking-widest">
@@ -294,13 +290,15 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
                             {/* CTAs */}
                             <div className="space-y-3 pt-2 border-t border-industrial-200">
-                                <AddToCartButton product={{
-                                    id: product.id,
-                                    name: product.name,
-                                    part_number: product.part_number,
-                                    brand: product.brand.name,
-                                    image: mainMedia?.url
-                                }} />
+                                <AddToCartButton
+                                    product={{
+                                        id: product.id,
+                                        name: product.name,
+                                        part_number: product.part_number,
+                                        brand: product.brand.name,
+                                        image: mainMedia?.url,
+                                    }}
+                                />
 
                                 <a
                                     href={`https://wa.me/5519971441580?text=${encodeURIComponent(
@@ -315,7 +313,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                                     </svg>
                                     Comprar pelo WhatsApp
                                 </a>
-
                             </div>
                         </div>
                     </div>
